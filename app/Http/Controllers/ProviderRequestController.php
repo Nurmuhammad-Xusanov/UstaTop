@@ -19,7 +19,7 @@ class ProviderRequestController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'phone' => 'required|string|max:13|phone:Uzbekistan',
+            'phone' => 'required|string|max:13',
             'city' => 'required|string|max:100',
             'service_ids' => 'required|array',
         ]);
