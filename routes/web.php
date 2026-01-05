@@ -3,8 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProviderRequestController;
-use App\Http\Controllers\Admin\ProviderRequestController as AdminProviderRequestController;
-use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\AdminDashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,11 +27,11 @@ Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->group(function () {
 
-        Route::get('/dashboard', DashboardController::class);
+        Route::get('/dashboard', [AdminDashboardController::class, 'index']);
 
         Route::resource(
             'provider-requests',
-            AdminProviderRequestController::class
+            ProviderRequestController::class
         )->only(['index', 'show', 'update', 'destroy']);
     });
 
