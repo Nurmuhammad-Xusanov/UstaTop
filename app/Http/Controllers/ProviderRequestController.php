@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\ProviderRequest;
 use Illuminate\Http\Request;
-use NunoMaduro\Collision\Provider;
 
 class ProviderRequestController extends Controller
 {
