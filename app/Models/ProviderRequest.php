@@ -17,4 +17,10 @@ class ProviderRequest extends Model
     protected $casts = [
         'service_ids' => 'array',
     ];
+
+    //to fijnd user with id while compacting in controller
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -42,6 +42,7 @@ class ProviderRequestController extends Controller
         $this->adminOnly();
 
         $requests = ProviderRequest::latest()->get();
+        
         return view('admin.provider_requests.index', compact('requests'));
     }
 
