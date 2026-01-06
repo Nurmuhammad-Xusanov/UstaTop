@@ -9,18 +9,10 @@
         <div class="bg-white dark:bg-gray-800 rounded shadow p-6">
 
             <table class="w-full text-left">
-                <thead>
-                    <tr class="border-b">
-                        <th>User</th>
-                        <th>City</th>
-                        <th>Status</th>
-                        <th></th>
-                    </tr>
-                </thead>
                 <tbody>
                     @foreach($requests as $r)
                         <tr class="border-b">
-                            <td>{{ $r->name }}</td>
+                            <td>{{ $r->user->name ?? "Unknown" }}</td>
                             <td>{{ $r->city }}</td>
                             <td>{{ $r->status }}</td>
                             <td>

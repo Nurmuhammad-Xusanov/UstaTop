@@ -23,4 +23,14 @@ class ProviderRequest extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function services()
+    {
+        return $this->belongsToMany(Category::class, 'provider_request_category', 'provider_request_id', 'category_id');
+    }
+
+    public function categories()
+    {
+        return Category::whereIn('id', $this->service_ids ?? [])->get();
+    }
 }
