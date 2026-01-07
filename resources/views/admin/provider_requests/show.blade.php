@@ -17,7 +17,7 @@
             <p>Services:</p>
             <ul>
 
-                {{  $providerRequest->categories() }}
+                {{  $providerRequest }}
                 {{-- @foreach($providerRequest->services() as $service)
                     <li>{{ $service->name }}</li>
                 @endforeach --}}
