@@ -14,23 +14,32 @@ class ServiceRequestController extends Controller
     {
         $user = auth()->user();
 
-        // client
-        if ($user->role === 'client' || $user->role === 'user') {
-            $requests = ServiceRequests::where('user_id', $user->id)->latest()->get();
+
+        if (in_array($user->role, ['client', 'user'])) {
+            $requests = ServiceRequests::where('user_id', $user->id)
+                ->latest()
+                ->get();
+
             return view('service.user_index', compact('requests'));
         }
 
-        // provider
+
         if ($user->role === 'provider') {
-            $requests = ServiceRequests::where('status', 'pending')
-                ->whereHas(
-                    'category',
-                    fn($q) =>
-                    $q->whereIn(
-                        'categories.id',
-                        $user->categories->pluck('id')
-                    )
-                )
+            $requests = ServiceRequests::where(function ($q) use ($user) {
+     
+                $q->where('status', 'pending')
+                    ->whereHas('category', function ($q2) use ($user) {
+                        $q2->whereIn(
+                            'categories.id',
+                            $user->categories->pluck('id')
+                        );
+                    });
+            })
+                ->orWhere(function ($q) use ($user) {
+    
+                    $q->where('provider_id', $user->id)
+                        ->whereIn('status', ['accepted', 'provider_done']);
+                })
                 ->latest()
                 ->get();
 
@@ -39,6 +48,7 @@ class ServiceRequestController extends Controller
 
         abort(403);
     }
+
 
     public function create()
     {
@@ -90,7 +100,7 @@ class ServiceRequestController extends Controller
                     "📍 Shahar: {$serviceRequest->city}\n" .
                     "📞 Telefon: {$serviceRequest->phone}\n" .
                     "📩 Email: {$serviceRequest->email}\n" .
-                    "🆔 Request ID: {$serviceRequest->id}".
+                    "🆔 Request ID: {$serviceRequest->id}" .
                     "Qabul qilish uchun login qilib, so‘rovlar bo‘limiga o‘ting."
             );
         }
@@ -100,10 +110,26 @@ class ServiceRequestController extends Controller
             ->with('success', 'So‘rov muvaffaqiyatli yaratildi');
     }
 
-    public function show(ServiceRequests $serviceRequest)
+    // public function show(ServiceRequests $serviceRequest)
+    // {
+    //     return view('service.show', compact('serviceRequest'));
+    // }
+
+    public function destroy(ServiceRequests $serviceRequest)
     {
-        return view('service.show', compact('serviceRequest'));
+        $user = auth()->user();
+
+        abort_if(
+            $serviceRequest->user_id !== $user->id ||
+                !in_array($serviceRequest->status, ['pending', 'cancelled']),
+            403
+        );
+
+        $serviceRequest->delete();
+
+        return back()->with('success', 'So‘rov o‘chirildi');
     }
+
 
 
     private function sendTelegram($chatId, $text)
@@ -114,5 +140,79 @@ class ServiceRequestController extends Controller
             'chat_id' => $chatId,
             'text' => $text,
         ]);
+    }
+
+    public function accept(ServiceRequests $serviceRequest)
+    {
+        $provider = auth()->user();
+
+        abort_if($serviceRequest->status !== 'pending', 403);
+
+        abort_if(
+            !$provider->categories->pluck('id')->contains($serviceRequest->category_id),
+            403
+        );
+
+        $serviceRequest->update([
+            'status' => 'accepted',
+            'provider_id' => $provider->id,
+        ]);
+
+        return back()->with('success', 'Ish qabul qilindi');
+    }
+
+    public function cancel(ServiceRequests $serviceRequest)
+    {
+        $provider = auth()->user();
+
+        abort_if(
+            $serviceRequest->status !== 'accepted' ||
+                $serviceRequest->provider_id !== $provider->id,
+            403
+        );
+
+        $serviceRequest->update([
+            'status' => 'cancelled',
+            'provider_id' => null,
+        ]);
+
+        return back()->with('success', 'Ish bekor qilindi');
+    }
+
+    public function providerDone(ServiceRequests $serviceRequest)
+    {
+        $provider = auth()->user();
+
+        abort_if(
+            $serviceRequest->status !== 'accepted' ||
+                $serviceRequest->provider_id !== $provider->id,
+            403
+        );
+
+        $serviceRequest->update([
+            'status' => 'provider_done',
+        ]);
+
+        return back()->with('success', 'Ish tugatilgani belgilandi');
+    }
+
+
+
+
+    public function clientConfirm(ServiceRequests $serviceRequest)
+    {
+        $user = auth()->user();
+
+        abort_if(
+            $serviceRequest->status !== 'provider_done' ||
+                $serviceRequest->user_id !== $user->id,
+            403
+        );
+
+        $serviceRequest->update([
+            'status' => 'completed',
+        ]);
+
+        return back()->with('success', 'Ish muvaffaqiyatli yakunlandi');
     }
 }
