@@ -18,6 +18,30 @@ class ProviderRequestController extends Controller
 
     public function store(Request $request)
     {
+        $user = auth()->user();
+
+        if (! $user->telegram_id) {
+            return back()->withErrors([
+                'telegram' => 'Avval Telegramni ulang',
+            ]);
+        }
+
+        if ($user->role === 'provider') {
+            return back()->withErrors([
+                'role' => 'Siz allaqachon provaydersiz',
+            ]);
+        }
+
+        if (ProviderRequest::where('user_id', $user->id)
+            ->where('status', 'pending')
+            ->exists()
+        ) {
+
+            return back()->withErrors([
+                'request' => 'So‘rovingiz ko‘rib chiqilmoqda',
+            ]);
+        }
+
         $request->validate([
             'phone' => 'required|string|max:13',
             'city' => 'required|string|max:100',
@@ -25,7 +49,7 @@ class ProviderRequestController extends Controller
         ]);
 
         ProviderRequest::create([
-            'user_id' => auth()->id(),
+            'user_id' => $user->id,
             'phone' => $request->phone,
             'city' => $request->city,
             'service_ids' => $request->service_ids,
@@ -33,6 +57,7 @@ class ProviderRequestController extends Controller
         ]);
 
         return back()->with('success', 'So‘rov yuborildi');
+
     }
 
     // ================= ADMIN =================
@@ -42,7 +67,7 @@ class ProviderRequestController extends Controller
         $this->adminOnly();
 
         $requests = ProviderRequest::latest()->get();
-        
+
         return view('admin.provider_requests.index', compact('requests'));
     }
 
@@ -50,7 +75,9 @@ class ProviderRequestController extends Controller
     {
         $this->adminOnly();
 
-        return view('admin.provider_requests.show', compact('providerRequest'));
+        $categories = Category::whereIn('id', $providerRequest->service_ids)->get();
+
+        return view('admin.provider_requests.show', compact('providerRequest', 'categories'));
     }
 
     public function update(Request $request, ProviderRequest $providerRequest)
@@ -79,7 +106,7 @@ class ProviderRequestController extends Controller
         $this->adminOnly();
 
         $providerRequest->delete();
-        return back()->with('success', 'Deleted');
+        return redirect()->route('provider-requests.index')->with('success', 'Deleted');
     }
 
     // ================= GUARD =================

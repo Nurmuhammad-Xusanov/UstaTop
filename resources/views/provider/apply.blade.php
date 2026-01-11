@@ -14,6 +14,7 @@
                     </div>
                 @endif
 
+
                 <form method="POST" action="{{ route('provider-requests.store') }}">
                     @csrf
 
@@ -42,6 +43,9 @@
                         <x-input-error :messages="$errors->get('service_ids')" class="mt-2" />
                     </div>
 
+                    @error('telegram')
+                        <p class="text-red-500">{{ $message }}</p>
+                    @enderror
                     @if (auth()->user()->telegram_id)
                         <p>✅ Telegram ulangan</p>
                     @else
