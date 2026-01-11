@@ -34,7 +34,7 @@
 
                     <div class="mt-4">
                         <x-input-label for="service_ids" :value="__('Xizmat Turlari')" />
-                        <select id="service_ids" name="service_ids[]" multiple
+                        <select required multiple id="service_ids" name="service_ids[]" multiple
                             class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>

@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class ProviderRequestController extends Controller
 {
-    // ================= USER =================
 
     public function create()
     {
@@ -57,18 +56,26 @@ class ProviderRequestController extends Controller
         ]);
 
         return back()->with('success', 'So‘rov yuborildi');
-
     }
 
-    // ================= ADMIN =================
+    
 
     public function index()
     {
-        $this->adminOnly();
+        $user = auth()->user();
 
-        $requests = ProviderRequest::latest()->get();
+        if ($user->role === 'admin') {
+            $requests = ProviderRequest::latest()->get();
+            return view('admin.provider_requests.index', compact('requests'));
+        }
 
-        return view('admin.provider_requests.index', compact('requests'));
+        $hasPending = ProviderRequest::where('user_id', $user->id)
+            ->where('status', 'pending')
+            ->exists();
+        $requests = ProviderRequest::where('user_id', $user->id)
+            ->latest()
+            ->get();
+        return view('provider.index', compact('requests', 'hasPending'));
     }
 
     public function show(ProviderRequest $providerRequest)
@@ -103,13 +110,11 @@ class ProviderRequestController extends Controller
 
     public function destroy(ProviderRequest $providerRequest)
     {
-        $this->adminOnly();
-
-        $providerRequest->delete();
-        return redirect()->route('provider-requests.index')->with('success', 'Deleted');
+            $providerRequest->delete();
+            return redirect()->route('provider-requests.index')->with('success', 'Deleted');
     }
 
-    // ================= GUARD =================
+
 
     private function adminOnly()
     {

@@ -20,7 +20,7 @@ Route::middleware('auth')->group(function () {
 
     // user provider request
     Route::resource('provider-requests', ProviderRequestController::class)
-        ->only(['create', 'store']);
+        ->only(['create', 'store', 'index', 'destroy']);
 });
 
 Route::middleware(['auth', 'admin'])
@@ -32,7 +32,7 @@ Route::middleware(['auth', 'admin'])
         Route::resource(
             'provider-requests',
             ProviderRequestController::class
-        )->only(['index', 'show', 'update', 'destroy']);
+        )->only(['index', 'show', 'update', 'destroy',]);
     });
 
 require __DIR__.'/auth.php';
