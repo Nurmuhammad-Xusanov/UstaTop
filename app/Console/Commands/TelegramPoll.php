@@ -22,7 +22,6 @@ class TelegramPoll extends Command
             try {
                 $response = Http::timeout(60)->get("https://api.telegram.org/bot{$token}/getUpdates", [
                     'offset' => $offset,
-                    'timeout' => 60,
                 ]);
 
                 if ($response->failed()) {
