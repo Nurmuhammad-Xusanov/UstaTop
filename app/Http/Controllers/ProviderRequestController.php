@@ -103,6 +103,8 @@ class ProviderRequestController extends Controller
             $providerRequest->user->update([
                 'role' => 'provider',
             ]);
+
+             $providerRequest->user->categories()->sync($providerRequest->service_ids);
         }
 
         return back()->with('success', 'Updated');
