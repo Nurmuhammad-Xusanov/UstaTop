@@ -23,7 +23,7 @@
                     <p class="text-gray-600">City: {{ $request->city }}</p>
                     <p class="text-gray-600">Phone: {{ $request->phone }}</p>
                     <p class="text-gray-600">Status: {{ $request->status }}</p>
-                    <form method="POST" action="{{ route('provider-requests.destroy', $request) }}"
+                    <form method="POST" action="{{ route('admin.provider-requests.destroy', $request) }}"
                         onsubmit="return confirm('Ishonching komilmi?')">
                         @csrf
                         @method('DELETE')

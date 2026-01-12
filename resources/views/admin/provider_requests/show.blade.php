@@ -20,7 +20,7 @@
                 @endforeach
             </ul>
 
-            <form action="{{ route('provider-requests.update', $providerRequest) }}" method="POST" class="mt-4">
+            <form action="{{ route('admin.provider-requests.update', $providerRequest) }}" method="POST" class="mt-4">
                 @csrf
                 @method('PATCH')
 
@@ -28,7 +28,7 @@
                 <button type="submit" class="mt-4 bg-green-500 text-white px-4 py-2 rounded">Approve</button>
             </form>
 
-            <form method="POST" action="{{ route('provider-requests.update', $providerRequest) }}">
+            <form method="POST" action="{{ route('admin.provider-requests.update', $providerRequest) }}">
                 @csrf
                 @method('PATCH')
 
@@ -39,7 +39,7 @@
                 </button>
             </form>
 
-            <form method="POST" action="{{ route('provider-requests.destroy', $providerRequest) }}"
+            <form method="POST" action="{{ route('admin.provider-requests.destroy', $providerRequest) }}"
                 onsubmit="return confirm('Ishonching komilmi?')">
                 @csrf
                 @method('DELETE')

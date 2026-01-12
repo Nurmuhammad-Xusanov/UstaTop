@@ -16,7 +16,7 @@
                             <td>{{ $r->city }}</td>
                             <td>{{ $r->status }}</td>
                             <td>
-                                <a href="{{ route('provider-requests.show', $r) }}"
+                                <a href="{{ route('admin.provider-requests.show', $r) }}"
                                    class="text-blue-500">
                                     View
                                 </a>
