@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --bg: 255 255 255;
+  --surface: 244 246 248;
+  --border: 225 229 234;
+
+  --text: 15 20 25;
+  --text-muted: 75 85 99;
+}
+
+.dark {
+  --bg: 15 20 25;
+  --surface: 28 35 43;
+  --border: 42 50 60;
+
+  --text: 230 232 235;
+  --text-muted: 168 176 186;
+}
