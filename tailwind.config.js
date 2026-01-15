@@ -17,16 +17,16 @@ export default {
 
             colors: {
                 accent: {
-                    DEFAULT: "#FF6A00",
-                    hover: "#FF8126",
-                    focus: "#FFC400",
+                    DEFAULT: "#0EA5E9",
+                    hover: "#38BDF8",
+                    focus: "#0284C7",
                 },
 
 
                 success: "#22C55E",
                 warning: "#FACC15",
                 error: "#EF4444",
-                info: "#3B82F6",
+                info: "#0EA5E9",
 
 
                 bg: "rgb(var(--bg) / <alpha-value>)",
