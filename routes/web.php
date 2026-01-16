@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
         '/service-requests/{serviceRequest}/confirm',
         [ServiceRequestController::class, 'clientConfirm']
     )->name('client.service-requests.confirm');
+    Route::post('/theme', [ProfileController::class, 'updateTheme'])->name('profile.updateTheme');
 });
 
 Route::middleware(['auth', 'admin'])
