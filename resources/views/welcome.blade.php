@@ -51,7 +51,7 @@
                 </nav>
             @endif
         </header>
-        <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0 p-6">
+        <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
             <main class="flex items-center justify-center gap-6 max-lg:flex-wrap w-full lg:max-w-7xl md:max-w-2xl sm:max-w-xl text-sm">
                 <div class="grid gap-4">
                     <h1 class="dark:text-white text-5xl">Ishonchli ustalar <br><span class="text-3xl block">- <span class="text-accent">bir platformada</span></span></h1>
