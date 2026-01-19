@@ -1,14 +1,10 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl">Yangi xizmat so‘rovi</h2>
-    </x-slot>
-
-    <div class="max-w-xl mx-auto mt-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 p-10"">
         <form method="POST" action="{{ route('service-requests.store') }}">
             @csrf
             <div>
                 <x-input-label value="Xizmat turi" />
-                <select name="category_id" required class="w-full mt-1 border rounded">
+                <select name="category_id" required class="w-full mt-1 border rounded dark:text-white dark:bg-gray-900">
                     <option value="">Tanlang</option>
                     @foreach ($categories as $category)
                         <option value="{{ $category->id }}">

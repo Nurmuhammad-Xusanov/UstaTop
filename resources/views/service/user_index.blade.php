@@ -11,7 +11,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @foreach ($requests as $request)
-                <div class="mb-6 p-6 bg-white dark:bg-gray-800 rounded-lg shadow">
+                <div class="mb-6 p-6 bg-white dark:bg-[#0a0a0a]  rounded-lg shadow">
                     <h3 class="text-lg font-medium text-gray-600">
                         {{ $request->user->name ?? 'Unknown' }}
                     </h3>
@@ -38,4 +38,10 @@
                 </div>
             @endforeach
         </div>
+        <div class="absolute bottom-5 right-5 text-white">
+            <a href="{{ route('service-requests.create') }}"
+                class="text-black dark:text-white border border-transparent hover:border-accent-hover dark:hover:border-accent-hover rounded-sm transition duration-200 leading-normal p-1.5">Yangi
+                so‘rov</a>
+        </div>
+    </div>
 </x-app-layout>
