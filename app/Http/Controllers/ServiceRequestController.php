@@ -121,7 +121,7 @@ class ServiceRequestController extends Controller
 
         abort_if(
             $serviceRequest->user_id !== $user->id ||
-                !in_array($serviceRequest->status, ['pending', 'cancelled']),
+                !in_array($serviceRequest->status, ['pending', 'completed','cancelled']),
             403
         );
 

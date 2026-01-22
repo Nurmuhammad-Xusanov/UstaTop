@@ -1,13 +1,4 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between">
-            <h2 class="font-semibold text-xl text-white leading-tight">
-                {{ __('Siz clientsiz, sizning so‘rovlaringiz:') }}
-            </h2>
-            <button><a href="{{ route('service-requests.create') }}" class="btn btn-primary">Yangi so‘rov</a></button>
-        </div>
-    </x-slot>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @foreach ($requests as $request)
@@ -21,7 +12,7 @@
                     @if ($request->status === 'provider_done' && $request->user_id === auth()->id())
                         <form method="POST" action="{{ route('client.service-requests.confirm', $request) }}">
                             @csrf
-                            <button class="bg-green-600 text-white px-3 py-1 rounded">
+                            <button class="mt-2 border p-1.5 rounded-sm hover:border-info hover:text-info dark:hover:text-info transition duration-200 text-dark dark:text-white">
                                 Ish tugadi
                             </button>
                         </form>
@@ -31,16 +22,16 @@
                         onsubmit="return confirm('Ishonching komilmi?')">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">
-                            Delete
+                        <button type="submit" class="mt-2 border p-1.5 rounded-sm hover:border-warning hover:text-warning dark:hover:text-warning transition duration-200 text-dark dark:text-white">
+                            O'chirish
                         </button>
                     </form>
                 </div>
             @endforeach
         </div>
-        <div class="absolute bottom-5 right-5 text-white">
+        <div class="fixed bottom-5 right-5 text-white">
             <a href="{{ route('service-requests.create') }}"
-                class="text-black dark:text-white border border-transparent hover:border-accent-hover dark:hover:border-accent-hover rounded-sm transition duration-200 leading-normal p-1.5">Yangi
+                class="text-black dark:text-white border border-transparent hover:text-accent dark:hover:text-accent hover:border-accent-hover dark:hover:border-accent-hover rounded-sm transition duration-200 leading-normal p-1.5">Yangi
                 so‘rov</a>
         </div>
     </div>
