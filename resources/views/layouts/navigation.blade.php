@@ -16,13 +16,20 @@
                         {{ __('Nazorat paneli') }}
                     </x-nav-link>
                     <x-nav-link :href="route('service-requests.index')"
-                        :active="request()->routeIs('service-requests.index')">
+                        :active="request()->routeIs('service-requests.*')">
                         {{ __('Xizmatlar') }}
                     </x-nav-link>
                     <x-nav-link :href="route('provider-requests.index')"
-                        :active="request()->routeIs('provider-requests.index')">
+                        :active="request()->routeIs('provider-requests.*')">
                         {{ __('Usta bo\'lish') }}
                     </x-nav-link>
+                    @if (auth()->user()->role === 'admin')
+                        <x-nav-link :href="route('admin.categories.index')"
+                            :active="request()->routeIs('admin.categories.*')">
+                            {{ __('Kategoriyalar') }}
+
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -101,12 +108,20 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Nazorat paneli') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('service-requests.index')" :active="request()->routeIs('service-requests.*')">
+            <x-responsive-nav-link :href="route('service-requests.index')"
+                :active="request()->routeIs('service-requests.*')">
                 {{ __('Xizmatlar') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('provider-requests.index')" :active="request()->routeIs('provider-requests.index')">
+            <x-responsive-nav-link :href="route('provider-requests.index')"
+                :active="request()->routeIs('provider-requests.index')">
                 {{ __('Usta bo\'lish') }}
             </x-responsive-nav-link>
+            @if (auth()->user()->role === 'admin')
+                <x-responsive-nav-link :href="route('admin.categories.index')"
+                    :active="request()->routeIs('admin.categories.*')">
+                    {{ __('Kategoriyalar') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
