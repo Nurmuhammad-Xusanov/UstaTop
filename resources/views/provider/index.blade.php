@@ -3,17 +3,17 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @foreach ($requests as $request)
                 <div>
-                    <h3 class="text-lg font-medium text-gray-600">
+                    <h3 class="text-lg font-medium text-black dark:text-white">
                         {{ $request->user->name ?? 'Unknown' }}
                     </h3>
-                    <p class="text-gray-600">City: {{ $request->city }}</p>
-                    <p class="text-gray-600">Phone: {{ $request->phone }}</p>
-                    <p class="text-gray-600">Status: {{ $request->status }}</p>
-                    <form method="POST" action="{{ route('admin.provider-requests.destroy', $request) }}"
+                    <p class="text-black dark:text-white">City: {{ $request->city }}</p>
+                    <p class="text-black dark:text-white">Phone: {{ $request->phone }}</p>
+                    <p class="text-black dark:text-white">Status: {{ $request->status }}</p>
+                    <form method="POST" action="{{ route('provider-requests.destroy', $request) }}"
                         onsubmit="return confirm('Ishonching komilmi?')">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">
+                        <button type="submit" class="mt-2 border rounded border-gray-800 hover:border-error hover:text-error dark:hover:text-error text-black dark:text-white p-1.5 transition duration-200">
                             Delete
                         </button>
                     </form>
