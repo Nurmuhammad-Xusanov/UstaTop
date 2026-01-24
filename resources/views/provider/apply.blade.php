@@ -49,7 +49,10 @@
                     @if (auth()->user()->telegram_id)
                         <p>✅ Telegram ulangan</p>
                     @else
-                        <a href="https://t.me/ustatpuzbot?start={{ auth()->id() }}" target="_blank">
+                        {{-- <a href="https://t.me/ustatpuzbot?start={{ auth()->id() }}" target="_blank">
+                            Telegram’ni ulash
+                        </a> --}}
+                        <a href="https://t.me/testvidosbludbot?start={{ auth()->id() }}" target="_blank">
                             Telegram’ni ulash
                         </a>
                     @endif

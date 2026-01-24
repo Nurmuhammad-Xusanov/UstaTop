@@ -6,25 +6,22 @@
     </x-slot>
 
     <div class="py-6 max-w-7xl mx-auto">
-        <div class="bg-white dark:bg-gray-800 rounded shadow p-6">
+        <div class="bg-white dark:bg-black rounded shadow p-6">
 
-            <table class="w-full text-left">
-                <tbody>
-                    @foreach($requests as $r)
-                        <tr class="border-b">
-                            <td>{{ $r->user->name ?? "Unknown" }}</td>
-                            <td>{{ $r->city }}</td>
-                            <td>{{ $r->status }}</td>
-                            <td>
-                                <a href="{{ route('admin.provider-requests.show', $r) }}"
-                                   class="text-blue-500">
-                                    View
-                                </a>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+
+            @foreach($requests as $r)
+                <div class="border-b border-gray-800 flex items-center justify-between py-4">
+                    <p class="text-black dark:text-white">{{ $r->user->name ?? "Unknown" }}</>
+                    <p class="text-black dark:text-white max-sm:hidden">{{ $r->city }}</p>
+                    <p class="text-black dark:text-white">{{ $r->status }}</p>
+
+                    <a href="{{ route('admin.provider-requests.show', $r) }}" class="text-blue-500">
+                        Batafsil
+                    </a>
+
+                </div>
+            @endforeach
+
 
         </div>
     </div>
