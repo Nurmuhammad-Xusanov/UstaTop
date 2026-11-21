@@ -312,5 +312,6 @@
     "Siz kiritgan ma'lumotlar bo'yicha eng yaqin va mos ustalar ko'rsatiladi.": "По введенным данным будут подобраны наиболее подходящие мастера.",
     "Bog'lanish uchun telefon": "Контактный телефон",
     "Qanday ish bajarilishi kerak? Qo'shimcha ma'lumot yoki qulay vaqtni yozing...": "Какая работа должна быть выполнена? Укажите детали или удобное время...",
-    "Xizmatlar ro'yxatiga qaytish": "Вернуться к списку услуг"
+    "Xizmatlar ro'yxatiga qaytish": "Вернуться к списку услуг",
+    "Email xizmati bilan vaqtincha bog'lanib bo'lmadi. Iltimos, birozdan so'ng qayta urinib ko'ring.": "Временно не удалось связаться с почтовым сервисом. Пожалуйста, повторите попытку позже."
 }

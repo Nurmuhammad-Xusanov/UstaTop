@@ -9,6 +9,12 @@
         </div>
     @endif
 
+    @if (session('status') == 'verification-link-failed')
+        <div class="mb-4 font-medium text-sm text-rose-600 dark:text-rose-400">
+            {{ __('Email xizmati bilan vaqtincha bog\'lanib bo\'lmadi. Iltimos, birozdan so\'ng qayta urinib ko\'ring.') }}
+        </div>
+    @endif
+
     <div class="mt-4 flex items-center justify-between">
         <form method="POST" action="{{ route('verification.send') }}">
             @csrf

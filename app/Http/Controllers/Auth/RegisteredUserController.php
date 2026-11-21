@@ -48,7 +48,11 @@ class RegisteredUserController extends Controller
             'sync_telegram_lang' => true,
         ]);
 
-        event(new Registered($user));
+        try {
+            event(new Registered($user));
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Email verification dispatch failed during registration: ' . $e->getMessage());
+        }
 
         Auth::login($user);
 

@@ -312,5 +312,6 @@
     "Siz kiritgan ma'lumotlar bo'yicha eng yaqin va mos ustalar ko'rsatiladi.": "Qualified craftsmen will be notified based on your details.",
     "Bog'lanish uchun telefon": "Contact Phone Number",
     "Qanday ish bajarilishi kerak? Qo'shimcha ma'lumot yoki qulay vaqtni yozing...": "What work needs to be done? Enter details or preferred time...",
-    "Xizmatlar ro'yxatiga qaytish": "Return to services list"
+    "Xizmatlar ro'yxatiga qaytish": "Return to services list",
+    "Email xizmati bilan vaqtincha bog'lanib bo'lmadi. Iltimos, birozdan so'ng qayta urinib ko'ring.": "Unable to connect to email service temporarily. Please try again later."
 }

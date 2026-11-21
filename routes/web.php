@@ -26,6 +26,35 @@ Route::get('/locale/{lang}', function ($lang) {
     return redirect()->back();
 })->name('locale.switch');
 
+Route::get('/debug-smtp', function () {
+    $ports = [2525, 587, 465, 80, 443];
+    $results = [];
+    foreach ($ports as $port) {
+        $t0 = microtime(true);
+        $fp = @fsockopen('smtp-relay.brevo.com', $port, $errno, $errstr, 2);
+        $duration = round(microtime(true) - $t0, 3);
+        if ($fp) {
+            $results[$port] = "OPEN ({$duration}s)";
+            fclose($fp);
+        } else {
+            $results[$port] = "BLOCKED/FAILED ({$errstr}, {$duration}s)";
+        }
+    }
+
+    if (request()->has('send')) {
+        try {
+            \Illuminate\Support\Facades\Mail::raw('Test live mail from Render', function ($msg) {
+                $msg->to(request('to', 'nursherzil@gmail.com'))->subject('Test from Render UstaTop');
+            });
+            $results['mail_send'] = 'SUCCESS';
+        } catch (\Throwable $e) {
+            $results['mail_send'] = 'FAILED: ' . $e->getMessage();
+        }
+    }
+
+    return response()->json($results);
+});
+
 Route::get('/', function () {
     $categories = \App\Models\Category::withCount('users')->take(9)->get();
     $masters = \App\Models\User::where('role', 'provider')
