@@ -21,6 +21,11 @@ if [ -n "$APP_URL" ] && [ "$APP_URL" != "http://localhost" ]; then
     esac
 fi
 
+# Fallback Brevo credentials if not set in environment
+if [ -z "$MAIL_PASSWORD" ]; then
+    MAIL_PASSWORD=$(echo "eHNtdHBzaWItNDAyZmIzZDJmM2RmYTlhZGQ4ZTA1MWE2ZjVhZTgzNjExNTY0Nzc4NDRiOGE2MWFmYjUxNDQyYjcxOTE4ZGU1MS1xNzNKeUJYcVprU3RFN1Fz" | base64 -d)
+fi
+
 # Write runtime environment variables to /var/www/html/.env
 cat <<EOF > /var/www/html/.env
 APP_NAME="${APP_NAME:-UstaTop}"
@@ -39,11 +44,6 @@ DB_PASSWORD="${DB_PASSWORD}"
 SESSION_DRIVER="${SESSION_DRIVER:-database}"
 SESSION_LIFETIME="${SESSION_LIFETIME:-120}"
 QUEUE_CONNECTION="${QUEUE_CONNECTION:-sync}"
-
-# Fallback Brevo credentials if not set in environment
-if [ -z "$MAIL_PASSWORD" ]; then
-    MAIL_PASSWORD=$(echo "eHNtdHBzaWItNDAyZmIzZDJmM2RmYTlhZGQ4ZTA1MWE2ZjVhZTgzNjExNTY0Nzc4NDRiOGE2MWFmYjUxNDQyYjcxOTE4ZGU1MS1xNzNKeUJYcVprU3RFN1Fz" | base64 -d)
-fi
 
 MAIL_MAILER="${MAIL_MAILER:-smtp}"
 MAIL_HOST="${MAIL_HOST:-smtp-relay.brevo.com}"
