@@ -158,6 +158,13 @@ class ServiceRequestController extends Controller
             'provider_id' => $provider->id,
         ]);
 
+        if ($serviceRequest->user && $serviceRequest->user->telegram_id) {
+            $this->sendTelegram(
+                $serviceRequest->user->telegram_id,
+                "✅ Sizning #{$serviceRequest->id} so'rovingiz usta {$provider->name} tomonidan qabul qilindi!\n\nTez orada usta siz bilan bog'lanadi."
+            );
+        }
+
         return back()->with('success', 'Ish qabul qilindi');
     }
 
@@ -176,6 +183,13 @@ class ServiceRequestController extends Controller
             'provider_id' => null,
         ]);
 
+        if ($serviceRequest->user && $serviceRequest->user->telegram_id) {
+            $this->sendTelegram(
+                $serviceRequest->user->telegram_id,
+                "⚠️ Sizning #{$serviceRequest->id} buyurtmangiz usta tomonidan bekor qilindi. Boshqa usta topishingiz mumkin."
+            );
+        }
+
         return back()->with('success', 'Ish bekor qilindi');
     }
 
@@ -193,11 +207,15 @@ class ServiceRequestController extends Controller
             'status' => 'provider_done',
         ]);
 
+        if ($serviceRequest->user && $serviceRequest->user->telegram_id) {
+            $this->sendTelegram(
+                $serviceRequest->user->telegram_id,
+                "🛠 Usta {$provider->name} #{$serviceRequest->id} buyurtmani bajarganini bildirdi.\n\nIltimos, saytga kirib natijani tasdiqlang: https://ustatop-lmze.onrender.com"
+            );
+        }
+
         return back()->with('success', 'Ish tugatilgani belgilandi');
     }
-
-
-
 
     public function clientConfirm(ServiceRequests $serviceRequest)
     {
@@ -212,6 +230,13 @@ class ServiceRequestController extends Controller
         $serviceRequest->update([
             'status' => 'completed',
         ]);
+
+        if ($serviceRequest->provider && $serviceRequest->provider->telegram_id) {
+            $this->sendTelegram(
+                $serviceRequest->provider->telegram_id,
+                "🎉 Mijoz #{$serviceRequest->id} buyurtmani muvaffaqiyatli yakunlangan deb tasdiqladi! Mehnat faoliyatingiz uchun rahmat."
+            );
+        }
 
         return back()->with('success', 'Ish muvaffaqiyatli yakunlandi');
     }
