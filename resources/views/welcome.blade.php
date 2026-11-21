@@ -27,15 +27,15 @@
         <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-[#FDFDFC]/90 dark:bg-[#0a0a0a]/90 border-b border-gray-200/80 dark:border-gray-800/80">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
                 <div class="flex items-center gap-8">
-                    <a href="{{ route('home') }}" class="font-semibold text-lg tracking-tight text-gray-900 dark:text-white hover:opacity-85 transition">
-                        UstaTop
+                    <a href="{{ route('home') }}" class="font-semibold text-lg tracking-tight text-gray-900 dark:text-white hover:opacity-90 transition">
+                        Usta<span class="text-accent">Top</span>
                     </a>
 
                     <nav class="hidden md:flex items-center space-x-6 text-xs font-medium text-gray-500 dark:text-gray-400">
-                        <a href="#services" class="hover:text-black dark:hover:text-white transition">{{ __('categories_title') }}</a>
-                        <a href="#masters" class="hover:text-black dark:hover:text-white transition">{{ __('top_masters_title') }}</a>
-                        <a href="#how-it-works" class="hover:text-black dark:hover:text-white transition">{{ __('how_it_works_title') }}</a>
-                        <a href="#faq" class="hover:text-black dark:hover:text-white transition">FAQ</a>
+                        <a href="#services" class="hover:text-accent dark:hover:text-accent transition duration-200">{{ __('categories_title') }}</a>
+                        <a href="#masters" class="hover:text-accent dark:hover:text-accent transition duration-200">{{ __('top_masters_title') }}</a>
+                        <a href="#how-it-works" class="hover:text-accent dark:hover:text-accent transition duration-200">{{ __('how_it_works_title') }}</a>
+                        <a href="#faq" class="hover:text-accent dark:hover:text-accent transition duration-200">FAQ</a>
                     </nav>
                 </div>
 
@@ -45,22 +45,22 @@
 
                     <!-- Theme Toggle -->
                     <button onclick="toggleTheme()" id="theme-toggle" type="button" aria-label="Toggle Theme"
-                        class="p-1.5 rounded border border-gray-200 dark:border-gray-800 hover:border-black dark:hover:border-white transition">
+                        class="p-1.5 rounded border border-gray-200 dark:border-gray-800 hover:border-accent transition duration-200">
                         <div class="dark:bg-white bg-black duration-200 rounded-full w-3.5 h-3.5"></div>
                     </button>
 
                     @auth
                         <a href="{{ route('dashboard') }}"
-                            class="px-3 py-1.5 text-xs font-medium rounded border border-gray-200 dark:border-gray-800 bg-black text-white dark:bg-white dark:text-black hover:opacity-85 transition">
+                            class="px-3 py-1.5 text-xs font-medium rounded border border-accent/40 bg-accent/10 text-accent hover:bg-accent hover:text-white dark:hover:text-black hover:shadow-[0_0_15px_rgba(14,165,233,0.3)] transition duration-200">
                             {{ __('nav_dashboard') }}
                         </a>
                     @else
                         <a href="{{ route('login') }}"
-                            class="px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition">
+                            class="px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition duration-200">
                             {{ __('nav_login') }}
                         </a>
                         <a href="{{ route('register') }}"
-                            class="px-3 py-1.5 text-xs font-medium rounded border border-gray-300 dark:border-gray-700 bg-black text-white dark:bg-white dark:text-black hover:opacity-85 transition shadow-sm">
+                            class="px-3 py-1.5 text-xs font-medium rounded border border-accent/40 bg-accent/10 text-accent hover:bg-accent hover:text-white dark:hover:text-black hover:shadow-[0_0_15px_rgba(14,165,233,0.3)] transition duration-200">
                             {{ __('nav_register') }}
                         </a>
                     @endauth
@@ -68,7 +68,7 @@
             </div>
         </header>
 
-        <!-- Main Content (Ultra-Minimalist, Zero Emojis) -->
+        <!-- Main Content (With Cyan Hover Effect & Sleek Buttons) -->
         <main class="flex-1">
 
             <!-- Hero Section -->
@@ -78,40 +78,40 @@
 
                         <!-- Left Text & Search -->
                         <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-                            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded text-[11px] font-medium border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#111110] text-gray-600 dark:text-gray-400">
-                                <span class="w-1.5 h-1.5 rounded-full bg-black dark:bg-white"></span>
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded text-[11px] font-medium border border-accent/30 bg-accent/10 text-accent">
+                                <span class="w-1.5 h-1.5 rounded-full bg-accent animate-ping"></span>
                                 <span>{{ __('live_badge') }}</span>
                             </div>
 
                             <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
                                 {{ __('hero_title') }} <br>
-                                <span class="text-gray-500 dark:text-gray-400 font-normal">{{ __('hero_subtitle') }}</span>
+                                <span class="text-gray-500 dark:text-gray-400 font-normal">- <span class="text-accent">bir platformada</span></span>
                             </h1>
 
                             <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 max-w-xl mx-auto lg:mx-0 leading-relaxed">
                                 {{ __('hero_description') }}
                             </p>
 
-                            <!-- Minimal Search Bar -->
+                            <!-- Minimal Search Bar with Cyan Focus -->
                             <div class="pt-1 max-w-lg mx-auto lg:mx-0">
                                 <form action="{{ route('service-requests.create') }}" method="GET" class="relative flex items-center">
                                     <input type="text" name="query" placeholder="{{ __('search_placeholder') }}"
-                                        class="w-full pl-3 pr-28 py-2.5 text-xs rounded border border-gray-300 dark:border-gray-700 bg-transparent text-gray-900 dark:text-white focus:outline-none focus:border-black dark:focus:border-white transition">
+                                        class="w-full pl-3 pr-28 py-2.5 text-xs rounded border border-gray-300 dark:border-gray-700 bg-transparent text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent transition duration-200">
                                     <button type="submit"
-                                        class="absolute right-1 px-3 py-1.5 text-xs font-medium rounded bg-black text-white dark:bg-white dark:text-black hover:opacity-85 transition">
+                                        class="absolute right-1 px-3 py-1.5 text-xs font-medium rounded border border-accent/40 bg-accent/10 text-accent hover:bg-accent hover:text-white dark:hover:text-black hover:shadow-[0_0_15px_rgba(14,165,233,0.3)] transition duration-200">
                                         {{ __('find_master_btn') }}
                                     </button>
                                 </form>
                             </div>
 
-                            <!-- Minimal CTA Buttons -->
+                            <!-- Sleek CTA Buttons -->
                             <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
                                 <a href="{{ route('service-requests.create') }}"
-                                    class="px-4 py-2 text-xs font-semibold rounded bg-black text-white dark:bg-white dark:text-black hover:opacity-85 transition shadow-sm">
+                                    class="px-4 py-2 text-xs font-semibold rounded border border-accent/40 bg-accent/10 text-accent hover:bg-accent hover:text-white dark:hover:text-black hover:shadow-[0_0_20px_rgba(14,165,233,0.35)] transition duration-200">
                                     {{ __('find_master_btn') }}
                                 </a>
                                 <a href="{{ route('provider-requests.index') }}"
-                                    class="px-4 py-2 text-xs font-medium rounded border border-gray-300 dark:border-gray-700 hover:border-black dark:hover:border-white transition">
+                                    class="px-4 py-2 text-xs font-medium rounded border border-gray-300 dark:border-gray-700 hover:border-accent hover:text-accent dark:hover:border-accent dark:hover:text-accent transition duration-200">
                                     {{ __('become_master_btn') }}
                                 </a>
                             </div>
@@ -128,7 +128,7 @@
                         <div class="lg:col-span-5 relative flex items-center justify-center">
                             <div class="relative w-full max-w-sm">
                                 <img src="{{ asset('img/usta.png') }}" alt="UstaTop"
-                                    class="w-full h-auto rounded-lg grayscale hover:grayscale-0 transition duration-500">
+                                    class="w-full h-auto rounded-lg">
                             </div>
                         </div>
 
@@ -183,12 +183,12 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         @foreach ($categories as $cat)
                             <a href="{{ route('service-requests.create') }}?category_id={{ $cat->id }}"
-                                class="p-4 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111110] hover:border-black dark:hover:border-white transition block">
+                                class="group p-4 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111110] hover:border-accent hover:shadow-[0_0_20px_rgba(14,165,233,0.15)] transition duration-200 block">
                                 <div class="flex items-center justify-between">
-                                    <h3 class="text-xs font-semibold text-gray-900 dark:text-white">
+                                    <h3 class="text-xs font-semibold text-gray-900 dark:text-white group-hover:text-accent transition duration-200">
                                         {{ $cat->name }}
                                     </h3>
-                                    <span class="text-[10px] text-gray-400 font-mono">
+                                    <span class="text-[10px] text-gray-400 font-mono group-hover:text-accent transition duration-200">
                                         {{ $cat->users_count > 0 ? $cat->users_count . ' usta' : 'Faol' }}
                                     </span>
                                 </div>
@@ -210,20 +210,20 @@
                                 {{ __('top_masters_subtitle') }}
                             </p>
                         </div>
-                        <a href="{{ route('service-requests.create') }}" class="text-xs text-gray-500 hover:text-black dark:hover:text-white transition">
+                        <a href="{{ route('service-requests.create') }}" class="text-xs text-gray-500 hover:text-accent dark:hover:text-accent transition duration-200">
                             {{ __('view_all') }} &rarr;
                         </a>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         @forelse ($masters as $master)
-                            <div class="p-4 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111110] flex flex-col justify-between">
+                            <div class="p-4 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111110] hover:border-accent hover:shadow-[0_0_20px_rgba(14,165,233,0.15)] transition duration-200 flex flex-col justify-between">
                                 <div>
                                     <div class="flex items-center justify-between">
                                         <div class="text-xs font-semibold text-gray-900 dark:text-white">
                                             {{ $master->name }}
                                         </div>
-                                        <span class="text-[10px] text-gray-500 font-mono">5.0 / 5.0</span>
+                                        <span class="text-[10px] text-accent font-mono font-medium">5.0 / 5.0</span>
                                     </div>
 
                                     <div class="mt-2 flex flex-wrap gap-1">
@@ -238,7 +238,7 @@
                                 <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
                                     <span class="text-[11px] text-gray-400">Uzbekistan</span>
                                     <a href="{{ route('service-requests.create') }}"
-                                        class="px-2.5 py-1 text-xs rounded border border-gray-300 dark:border-gray-700 hover:border-black dark:hover:border-white transition">
+                                        class="px-2.5 py-1 text-xs rounded border border-gray-300 dark:border-gray-700 hover:border-accent hover:text-accent dark:hover:border-accent dark:hover:text-accent transition duration-200">
                                         {{ __('find_master_btn') }}
                                     </a>
                                 </div>
@@ -265,20 +265,20 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="p-5 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111110]">
-                            <div class="text-xs font-mono text-gray-400 mb-2">01</div>
+                        <div class="p-5 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111110] hover:border-accent hover:shadow-[0_0_20px_rgba(14,165,233,0.12)] transition duration-200">
+                            <div class="text-xs font-mono text-accent mb-2">01</div>
                             <h3 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">{{ __('step_1_title') }}</h3>
                             <p class="text-xs text-gray-500 leading-relaxed">{{ __('step_1_desc') }}</p>
                         </div>
 
-                        <div class="p-5 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111110]">
-                            <div class="text-xs font-mono text-gray-400 mb-2">02</div>
+                        <div class="p-5 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111110] hover:border-accent hover:shadow-[0_0_20px_rgba(14,165,233,0.12)] transition duration-200">
+                            <div class="text-xs font-mono text-accent mb-2">02</div>
                             <h3 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">{{ __('step_2_title') }}</h3>
                             <p class="text-xs text-gray-500 leading-relaxed">{{ __('step_2_desc') }}</p>
                         </div>
 
-                        <div class="p-5 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111110]">
-                            <div class="text-xs font-mono text-gray-400 mb-2">03</div>
+                        <div class="p-5 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111110] hover:border-accent hover:shadow-[0_0_20px_rgba(14,165,233,0.12)] transition duration-200">
+                            <div class="text-xs font-mono text-accent mb-2">03</div>
                             <h3 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">{{ __('step_3_title') }}</h3>
                             <p class="text-xs text-gray-500 leading-relaxed">{{ __('step_3_desc') }}</p>
                         </div>
@@ -286,20 +286,20 @@
                 </div>
             </section>
 
-            <!-- Telegram Bot Callout Banner (Monochrome Minimalist) -->
+            <!-- Telegram Bot Callout Banner -->
             <section class="py-8 bg-gray-50/50 dark:bg-[#111110] border-b border-gray-100 dark:border-gray-900">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
                         <div class="text-center sm:text-left">
                             <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
-                                Telegram Bot &bull; @ustatpuzbot
+                                Telegram Bot &bull; <span class="text-accent">@ustatpuzbot</span>
                             </h3>
                             <p class="text-xs text-gray-500 mt-0.5">
                                 Buyurtma holati va yangiliklarni to'g'ridan-to'g'ri Telegram orqali qabul qiling.
                             </p>
                         </div>
                         <a href="https://t.me/ustatpuzbot" target="_blank"
-                            class="px-4 py-2 rounded text-xs font-medium border border-gray-300 dark:border-gray-700 bg-white dark:bg-black text-black dark:text-white hover:border-black dark:hover:border-white transition shrink-0">
+                            class="px-4 py-2 rounded text-xs font-medium border border-accent/40 bg-accent/10 text-accent hover:bg-accent hover:text-white dark:hover:text-black hover:shadow-[0_0_15px_rgba(14,165,233,0.3)] transition duration-200 shrink-0">
                             @ustatpuzbot &rarr;
                         </a>
                     </div>
@@ -316,7 +316,7 @@
                     </div>
 
                     <div class="space-y-2">
-                        <div class="border border-gray-200 dark:border-gray-800 rounded bg-white dark:bg-[#111110]">
+                        <div class="border border-gray-200 dark:border-gray-800 rounded bg-white dark:bg-[#111110] hover:border-accent/60 transition duration-200">
                             <button @click="active = (active === 1 ? 0 : 1)"
                                 class="w-full p-4 text-left text-xs font-medium text-gray-900 dark:text-white flex items-center justify-between">
                                 <span>{{ __('faq_q1') }}</span>
@@ -327,7 +327,7 @@
                             </div>
                         </div>
 
-                        <div class="border border-gray-200 dark:border-gray-800 rounded bg-white dark:bg-[#111110]">
+                        <div class="border border-gray-200 dark:border-gray-800 rounded bg-white dark:bg-[#111110] hover:border-accent/60 transition duration-200">
                             <button @click="active = (active === 2 ? 0 : 2)"
                                 class="w-full p-4 text-left text-xs font-medium text-gray-900 dark:text-white flex items-center justify-between">
                                 <span>{{ __('faq_q2') }}</span>
@@ -338,7 +338,7 @@
                             </div>
                         </div>
 
-                        <div class="border border-gray-200 dark:border-gray-800 rounded bg-white dark:bg-[#111110]">
+                        <div class="border border-gray-200 dark:border-gray-800 rounded bg-white dark:bg-[#111110] hover:border-accent/60 transition duration-200">
                             <button @click="active = (active === 3 ? 0 : 3)"
                                 class="w-full p-4 text-left text-xs font-medium text-gray-900 dark:text-white flex items-center justify-between">
                                 <span>{{ __('faq_q3') }}</span>
@@ -354,17 +354,17 @@
 
         </main>
 
-        <!-- Minimalist Footer -->
+        <!-- Minimalist Footer with Accent -->
         <footer class="py-8 bg-white dark:bg-[#0a0a0a] border-t border-gray-100 dark:border-gray-900 text-xs text-gray-400">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                    <span class="font-semibold text-gray-900 dark:text-white">UstaTop</span> &bull; &copy; {{ date('Y') }} {{ __('footer_rights') }}
+                    <span class="font-semibold text-gray-900 dark:text-white tracking-tight">Usta<span class="text-accent">Top</span></span> &bull; &copy; {{ date('Y') }} {{ __('footer_rights') }}
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <a href="#services" class="hover:text-black dark:hover:text-white transition">{{ __('categories_title') }}</a>
-                    <a href="#how-it-works" class="hover:text-black dark:hover:text-white transition">{{ __('how_it_works_title') }}</a>
-                    <a href="https://t.me/ustatpuzbot" target="_blank" class="hover:text-black dark:hover:text-white transition">@ustatpuzbot</a>
+                    <a href="#services" class="hover:text-accent dark:hover:text-accent transition duration-200">{{ __('categories_title') }}</a>
+                    <a href="#how-it-works" class="hover:text-accent dark:hover:text-accent transition duration-200">{{ __('how_it_works_title') }}</a>
+                    <a href="https://t.me/ustatpuzbot" target="_blank" class="hover:text-accent dark:hover:text-accent transition duration-200">@ustatpuzbot</a>
                 </div>
             </div>
         </footer>

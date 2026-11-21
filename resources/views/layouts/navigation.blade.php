@@ -5,8 +5,8 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('home') }}" class="dark:text-white font-semibold text-xl">
-                        UstaTop
+                    <a href="{{ route('home') }}" class="dark:text-white font-semibold text-xl tracking-tight">
+                        Usta<span class="text-accent">Top</span>
                     </a>
                 </div>
 

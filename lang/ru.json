@@ -182,5 +182,15 @@
     "Kategoriya qo'shish": "Добавить категорию",
     "Kategoriya nomi": "Название категории",
     "Bekor qilish": "Отмена",
-    "Saqlash": "Сохранить"
+    "Saqlash": "Сохранить",
+    "Google orqali kirish": "Войти через Google",
+    "Google orqali ro'yxatdan o'tish": "Зарегистрироваться через Google",
+    "yoki": "или",
+    "Google orqali autentifikatsiya bekor qilindi.": "Аутентификация через Google была отменена.",
+    "Google bilan bog'lanishda xatolik yuz berdi.": "Произошла ошибка при подключении к Google.",
+    "Google tokeni olinmadi.": "Не удалось получить токен Google.",
+    "Google ma'lumotlarini yuklab bo'lmadi.": "Не удалось загрузить данные профиля Google.",
+    "Google hisobingizda email topilmadi.": "Email не найден в вашем аккаунте Google.",
+    "Xavfsizlik tekshiruvi amalga oshmadi. Iltimos qaytadan urinib ko'ring.": "Проверка безопасности не удалась. Пожалуйста, попробуйте снова.",
+    "Google orqali kirish hozirda sozlanmagan. Iltimos, email va parol orqali kiring yoki administratorga murojaat qiling.": "Вход через Google временно не настроен. Пожалуйста, войдите с помощью email и пароля или свяжитесь с администратором."
 }

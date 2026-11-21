@@ -26,15 +26,15 @@
 
         <!-- Guest Minimal Header -->
         <header class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <a href="/" class="font-bold text-lg tracking-tight text-gray-900 dark:text-white hover:opacity-85 transition">
-                UstaTop
+            <a href="/" class="font-bold text-lg tracking-tight text-gray-900 dark:text-white hover:opacity-90 transition">
+                Usta<span class="text-accent">Top</span>
             </a>
 
             <div class="flex items-center gap-2">
                 <x-language-switcher />
 
                 <button onclick="toggleTheme()" id="theme-toggle" type="button" aria-label="Toggle Theme"
-                    class="p-1.5 rounded border border-gray-200 dark:border-gray-800 hover:border-black dark:hover:border-white transition">
+                    class="p-1.5 rounded border border-gray-200 dark:border-gray-800 hover:border-accent transition duration-200">
                     <div class="dark:bg-white bg-black duration-200 rounded-full w-3.5 h-3.5"></div>
                 </button>
             </div>

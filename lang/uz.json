@@ -180,5 +180,15 @@
     "Kategoriya qo'shish": "Kategoriya qo'shish",
     "Kategoriya nomi": "Kategoriya nomi",
     "Bekor qilish": "Bekor qilish",
-    "Saqlash": "Saqlash"
+    "Saqlash": "Saqlash",
+    "Google orqali kirish": "Google orqali kirish",
+    "Google orqali ro'yxatdan o'tish": "Google orqali ro'yxatdan o'tish",
+    "yoki": "yoki",
+    "Google orqali autentifikatsiya bekor qilindi.": "Google orqali autentifikatsiya bekor qilindi.",
+    "Google bilan bog'lanishda xatolik yuz berdi.": "Google bilan bog'lanishda xatolik yuz berdi.",
+    "Google tokeni olinmadi.": "Google tokeni olinmadi.",
+    "Google ma'lumotlarini yuklab bo'lmadi.": "Google ma'lumotlarini yuklab bo'lmadi.",
+    "Google hisobingizda email topilmadi.": "Google hisobingizda email topilmadi.",
+    "Xavfsizlik tekshiruvi amalga oshmadi. Iltimos qaytadan urinib ko'ring.": "Xavfsizlik tekshiruvi amalga oshmadi. Iltimos qaytadan urinib ko'ring.",
+    "Google orqali kirish hozirda sozlanmagan. Iltimos, email va parol orqali kiring yoki administratorga murojaat qiling.": "Google orqali kirish hozirda sozlanmagan. Iltimos, email va parol orqali kiring yoki administratorga murojaat qiling."
 }

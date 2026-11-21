@@ -27,22 +27,22 @@
                 </div>
             @endif
 
-            <!-- Navigation Tabs for Admin (Minimalist, Zero Emojis) -->
+            <!-- Navigation Tabs for Admin -->
             <div class="flex flex-wrap gap-1.5 border-b border-gray-200 dark:border-gray-800 pb-2.5">
                 <a href="{{ route('admin.dashboard') }}"
-                    class="px-3 py-1.5 text-xs font-semibold rounded bg-black text-white dark:bg-white dark:text-black">
+                    class="px-3 py-1.5 text-xs font-semibold rounded border border-accent/40 bg-accent/10 text-accent">
                     {{ __('general_stats') }}
                 </a>
                 <a href="{{ route('admin.users.index') }}"
-                    class="px-3 py-1.5 text-xs font-medium rounded text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1a1a19] transition">
+                    class="px-3 py-1.5 text-xs font-medium rounded border border-transparent text-gray-600 dark:text-gray-400 hover:border-accent hover:text-accent dark:hover:border-accent dark:hover:text-accent hover:bg-accent/5 transition duration-200">
                     {{ __('users_tab') }} ({{ $stats['total_users'] }})
                 </a>
                 <a href="{{ route('admin.service-requests.index') }}"
-                    class="px-3 py-1.5 text-xs font-medium rounded text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1a1a19] transition">
+                    class="px-3 py-1.5 text-xs font-medium rounded border border-transparent text-gray-600 dark:text-gray-400 hover:border-accent hover:text-accent dark:hover:border-accent dark:hover:text-accent hover:bg-accent/5 transition duration-200">
                     {{ __('orders_tab') }} ({{ $stats['total_requests'] }})
                 </a>
                 <a href="{{ route('admin.provider-requests.index') }}"
-                    class="px-3 py-1.5 text-xs font-medium rounded text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1a1a19] transition flex items-center gap-1.5">
+                    class="px-3 py-1.5 text-xs font-medium rounded border border-transparent text-gray-600 dark:text-gray-400 hover:border-accent hover:text-accent dark:hover:border-accent dark:hover:text-accent hover:bg-accent/5 transition duration-200 flex items-center gap-1.5">
                     {{ __('master_requests_tab') }}
                     @if ($stats['pending_provider_requests'] > 0)
                         <span class="px-1.5 py-0.2 text-[10px] bg-accent text-white rounded font-mono">
@@ -51,11 +51,11 @@
                     @endif
                 </a>
                 <a href="{{ route('admin.categories.index') }}"
-                    class="px-3 py-1.5 text-xs font-medium rounded text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1a1a19] transition">
+                    class="px-3 py-1.5 text-xs font-medium rounded border border-transparent text-gray-600 dark:text-gray-400 hover:border-accent hover:text-accent dark:hover:border-accent dark:hover:text-accent hover:bg-accent/5 transition duration-200">
                     {{ __('categories_tab') }} ({{ $stats['total_categories'] }})
                 </a>
                 <a href="{{ route('admin.sessions.index') }}"
-                    class="px-3 py-1.5 text-xs font-medium rounded text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1a1a19] transition">
+                    class="px-3 py-1.5 text-xs font-medium rounded border border-transparent text-gray-600 dark:text-gray-400 hover:border-accent hover:text-accent dark:hover:border-accent dark:hover:text-accent hover:bg-accent/5 transition duration-200">
                     {{ __('sessions_tab') }} ({{ $stats['active_sessions'] }})
                 </a>
             </div>
@@ -134,7 +134,7 @@
                         <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
                             {{ __('pending_master_apps') }}
                         </h3>
-                        <a href="{{ route('admin.provider-requests.index') }}" class="text-xs text-gray-500 hover:text-black dark:hover:text-white transition">
+                        <a href="{{ route('admin.provider-requests.index') }}" class="text-xs text-gray-500 hover:text-accent dark:hover:text-accent transition duration-200">
                             {{ __('view_all') }} &rarr;
                         </a>
                     </div>
@@ -151,7 +151,7 @@
                                     </div>
                                 </div>
                                 <a href="{{ route('admin.provider-requests.show', $pr->id) }}"
-                                    class="px-2.5 py-1 text-xs rounded border border-gray-300 dark:border-gray-700 hover:border-black dark:hover:border-white transition">
+                                    class="px-2.5 py-1 text-xs rounded border border-accent/40 bg-accent/10 text-accent hover:bg-accent hover:text-white dark:hover:text-black hover:shadow-[0_0_15px_rgba(14,165,233,0.25)] transition duration-200">
                                     {{ __('review_btn') }}
                                 </a>
                             </div>
@@ -170,7 +170,7 @@
                     <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
                         {{ __('new_users') }}
                     </h3>
-                    <a href="{{ route('admin.users.index') }}" class="text-xs text-gray-500 hover:text-black dark:hover:text-white transition">
+                    <a href="{{ route('admin.users.index') }}" class="text-xs text-gray-500 hover:text-accent dark:hover:text-accent transition duration-200">
                         {{ __('users_mgmt') }} &rarr;
                     </a>
                 </div>

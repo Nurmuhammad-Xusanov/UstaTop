@@ -182,5 +182,15 @@
     "Kategoriya qo'shish": "Add Category",
     "Kategoriya nomi": "Category Name",
     "Bekor qilish": "Cancel",
-    "Saqlash": "Save"
+    "Saqlash": "Save",
+    "Google orqali kirish": "Sign in with Google",
+    "Google orqali ro'yxatdan o'tish": "Sign up with Google",
+    "yoki": "or",
+    "Google orqali autentifikatsiya bekor qilindi.": "Google authentication was cancelled.",
+    "Google bilan bog'lanishda xatolik yuz berdi.": "An error occurred while connecting to Google.",
+    "Google tokeni olinmadi.": "Could not retrieve Google token.",
+    "Google ma'lumotlarini yuklab bo'lmadi.": "Could not fetch Google profile details.",
+    "Google hisobingizda email topilmadi.": "No email address found in your Google profile.",
+    "Xavfsizlik tekshiruvi amalga oshmadi. Iltimos qaytadan urinib ko'ring.": "Security check failed. Please try again.",
+    "Google orqali kirish hozirda sozlanmagan. Iltimos, email va parol orqali kiring yoki administratorga murojaat qiling.": "Google login is not currently configured. Please sign in with email and password or contact administrator."
 }
