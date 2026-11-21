@@ -1,4 +1,4 @@
-# Multi-stage build for Laravel 12 on PHP 8.2 + Nginx
+# Multi-stage build for Laravel 12 on PHP 8.4 + Nginx
 FROM node:20-alpine AS frontend
 WORKDIR /app
 COPY package*.json ./
@@ -6,7 +6,7 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-FROM php:8.2-fpm-alpine
+FROM php:8.4-fpm-alpine
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
