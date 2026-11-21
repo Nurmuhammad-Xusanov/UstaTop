@@ -34,4 +34,31 @@
             </button>
         </form>
     </div>
+
+    <script>
+        // Automatically redirect to dashboard as soon as email is verified on phone or another browser
+        (function() {
+            var checkInterval = setInterval(function () {
+                fetch('{{ route("verification.status") }}', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(function (res) {
+                    if (res.ok) {
+                        return res.json();
+                    }
+                    return null;
+                })
+                .then(function (data) {
+                    if (data && data.verified) {
+                        clearInterval(checkInterval);
+                        window.location.href = '{{ route("dashboard") }}';
+                    }
+                })
+                .catch(function () {});
+            }, 2000);
+        })();
+    </script>
 </x-guest-layout>

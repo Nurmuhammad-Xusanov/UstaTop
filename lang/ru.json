@@ -313,5 +313,7 @@
     "Bog'lanish uchun telefon": "Контактный телефон",
     "Qanday ish bajarilishi kerak? Qo'shimcha ma'lumot yoki qulay vaqtni yozing...": "Какая работа должна быть выполнена? Укажите детали или удобное время...",
     "Xizmatlar ro'yxatiga qaytish": "Вернуться к списку услуг",
-    "Email xizmati bilan vaqtincha bog'lanib bo'lmadi. Iltimos, birozdan so'ng qayta urinib ko'ring.": "Временно не удалось связаться с почтовым сервисом. Пожалуйста, повторите попытку позже."
+    "Email xizmati bilan vaqtincha bog'lanib bo'lmadi. Iltimos, birozdan so'ng qayta urinib ko'ring.": "Временно не удалось связаться с почтовым сервисом. Пожалуйста, повторите попытку позже.",
+    "Emailingiz muvaffaqiyatli tasdiqlandi! Endi hisobingizga kirishingiz mumkin.": "Ваш email успешно подтвержден! Теперь вы можете войти в свой аккаунт.",
+    "Foydalanuvchi topilmadi.": "Пользователь не найден."
 }
