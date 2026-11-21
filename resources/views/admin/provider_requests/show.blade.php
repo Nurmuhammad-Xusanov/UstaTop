@@ -1,58 +1,105 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-xl font-semibold">
-            Provider Requests
-        </h2>
+        <div class="flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white tracking-tight">
+                {{ __('Arizani ko\'rib chiqish') }} #{{ $providerRequest->id }}
+            </h2>
+            <a href="{{ route('admin.provider-requests.index') }}" class="text-xs text-gray-500 hover:text-black dark:hover:text-white transition">
+                &larr; {{ __('Ortga qaytish') }}
+            </a>
+        </div>
     </x-slot>
 
-    <div class="py-6 max-w-7xl mx-auto">
-        <div class="bg-white dark:bg-black rounded shadow p-6">
-            <h1 class="text-black dark:text-white">{{ $providerRequest->user->name ?? 'Unknown' }}</h1>
-            <p class="text-black dark:text-white">Role: {{ $providerRequest->user->role ?? 'Not assigned' }}</p>
-            <p class="text-black dark:text-white">City: {{ $providerRequest->city }}</p>
-            <p class="text-black dark:text-white">Phone: {{ $providerRequest->phone }}</p>
-            <p class="text-black dark:text-white">Email: {{ $providerRequest->user->email ?? 'Not provided' }}</p>
-            <p class="text-black dark:text-white">Status: {{ $providerRequest->status }}</p>
-            <p class="text-black dark:text-white">Telegram id:
-                {{ $providerRequest->user->telegram_id ?? 'Not provided' }}</p>
-            <ul>
-                @foreach ($categories as $category)
-                    <li class="text-black dark:text-white">{{ $category->name }}</li>
-                @endforeach
-            </ul>
-            <div class="flex gap-2 items-center mt-4">
-                <form action="{{ route('admin.provider-requests.update', $providerRequest) }}" method="POST">
-                    @csrf
-                    @method('PATCH')
+    <div class="py-6 max-w-3xl mx-auto sm:px-6 lg:px-8 space-y-6">
+        @if (session('success'))
+            <div class="p-3 bg-gray-50 dark:bg-[#161615] border border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-200 rounded text-xs">
+                {{ session('success') }}
+            </div>
+        @endif
 
-                    <input type="hidden" name="status" value="approved">
-                    <button type="submit"
-                        class="border rounded border-gray-800 hover:border-success hover:text-success dark:hover:text-success text-black dark:text-white p-1.5 transition duration-200">Approve</button>
-                </form>
+        <div class="bg-white dark:bg-[#111110] rounded-lg border border-gray-200 dark:border-gray-800 p-6 shadow-sm space-y-6">
+            <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-800">
+                <div>
+                    <h3 class="text-base font-semibold text-gray-900 dark:text-white">
+                        {{ $providerRequest->user->name ?? 'Unknown' }}
+                    </h3>
+                    <p class="text-xs text-gray-400 mt-0.5">
+                        {{ $providerRequest->user->email ?? 'No email' }}
+                    </p>
+                </div>
+                <span class="px-2.5 py-1 text-xs font-mono uppercase tracking-wider rounded border border-gray-200 dark:border-gray-800 {{ $providerRequest->status === 'approved' ? 'text-green-600 dark:text-green-400' : ($providerRequest->status === 'rejected' ? 'text-red-600 dark:text-red-400' : 'text-amber-600 dark:text-amber-400') }}">
+                    {{ $providerRequest->status }}
+                </span>
+            </div>
 
-                <form method="POST" action="{{ route('admin.provider-requests.update', $providerRequest) }}">
-                    @csrf
-                    @method('PATCH')
+            <div class="grid grid-cols-2 gap-4 text-xs">
+                <div>
+                    <span class="text-gray-400 uppercase tracking-wider text-[10px]">{{ __('city_col') }}</span>
+                    <div class="text-gray-900 dark:text-white font-medium mt-1">{{ $providerRequest->city }}</div>
+                </div>
+                <div>
+                    <span class="text-gray-400 uppercase tracking-wider text-[10px]">{{ __('phone_col') }}</span>
+                    <div class="text-gray-900 dark:text-white font-mono mt-1">{{ $providerRequest->phone }}</div>
+                </div>
+                <div>
+                    <span class="text-gray-400 uppercase tracking-wider text-[10px]">{{ __('telegram_col') }}</span>
+                    <div class="text-gray-900 dark:text-white font-mono mt-1">{{ $providerRequest->user->telegram_id ?? 'Ulanmagan' }}</div>
+                </div>
+                <div>
+                    <span class="text-gray-400 uppercase tracking-wider text-[10px]">{{ __('created_at_col') }}</span>
+                    <div class="text-gray-900 dark:text-white mt-1">{{ $providerRequest->created_at->format('d.m.Y H:i') }}</div>
+                </div>
+            </div>
 
-                    <input type="hidden" name="status" value="rejected">
+            <div>
+                <span class="text-gray-400 uppercase tracking-wider text-[10px]">{{ __('Tanlangan sohalar') }}</span>
+                <div class="flex flex-wrap gap-2 mt-2">
+                    @forelse ($categories as $category)
+                        <span class="px-2.5 py-1 rounded border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#161615] text-xs text-gray-800 dark:text-gray-200">
+                            {{ $category->name }}
+                        </span>
+                    @empty
+                        <span class="text-xs text-gray-400">Soha ko'rsatilmagan</span>
+                    @endforelse
+                </div>
+            </div>
 
-                    <button type="submit" class="border rounded border-gray-800 hover:border-warning hover:text-warning dark:hover:text-warning text-black dark:text-white p-1.5 transition duration-200">
-                        Reject
-                    </button>
-                </form>
+            <div class="pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    @if ($providerRequest->status !== 'approved')
+                        <form action="{{ route('admin.provider-requests.update', $providerRequest) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <input type="hidden" name="status" value="approved">
+                            <button type="submit"
+                                class="px-4 py-2 text-xs font-semibold rounded bg-black text-white dark:bg-white dark:text-black hover:opacity-85 transition">
+                                {{ __('approve_btn') }}
+                            </button>
+                        </form>
+                    @endif
+
+                    @if ($providerRequest->status !== 'rejected')
+                        <form method="POST" action="{{ route('admin.provider-requests.update', $providerRequest) }}">
+                            @csrf
+                            @method('PATCH')
+                            <input type="hidden" name="status" value="rejected">
+                            <button type="submit"
+                                class="px-4 py-2 text-xs font-semibold rounded border border-gray-300 dark:border-gray-700 hover:border-black dark:hover:border-white transition">
+                                {{ __('reject_btn') }}
+                            </button>
+                        </form>
+                    @endif
+                </div>
 
                 <form method="POST" action="{{ route('admin.provider-requests.destroy', $providerRequest) }}"
-                    onsubmit="return confirm('Ishonching komilmi?')">
+                    onsubmit="return confirm('Haqiqatan ham bu arizani o\'chirmoqchimisiz?')">
                     @csrf
                     @method('DELETE')
-
-                    <button type="submit" class="border rounded border-gray-800 hover:border-error hover:text-error dark:hover:text-error text-black dark:text-white p-1.5 transition duration-200">
-                        Delete
+                    <button type="submit" class="text-xs text-red-600 hover:text-red-800 dark:hover:text-red-400">
+                        {{ __('delete_btn') }}
                     </button>
                 </form>
             </div>
-
-
         </div>
     </div>
 </x-app-layout>

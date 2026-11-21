@@ -5,26 +5,56 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'UstaTop') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700" rel="stylesheet" />
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-white dark:bg-black">
-            <div>
-                <a href="/" class="dark:text-white font-semibold text-3xl"">
-                    UstaTop
-                </a>
-            </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-black shadow-md overflow-hidden sm:rounded-lg">
+        <script>
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        </script>
+    </head>
+    <body class="font-sans text-gray-900 dark:text-gray-100 bg-[#FDFDFC] dark:bg-[#0a0a0a] min-h-screen flex flex-col justify-between antialiased transition-colors duration-200">
+
+        <!-- Guest Minimal Header -->
+        <header class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <a href="/" class="font-bold text-lg tracking-tight text-gray-900 dark:text-white hover:opacity-85 transition">
+                UstaTop
+            </a>
+
+            <div class="flex items-center gap-2">
+                <x-language-switcher />
+
+                <button onclick="toggleTheme()" id="theme-toggle" type="button" aria-label="Toggle Theme"
+                    class="p-1.5 rounded border border-gray-200 dark:border-gray-800 hover:border-black dark:hover:border-white transition">
+                    <div class="dark:bg-white bg-black duration-200 rounded-full w-3.5 h-3.5"></div>
+                </button>
+            </div>
+        </header>
+
+        <!-- Auth Card Container -->
+        <div class="flex-1 flex flex-col justify-center items-center px-4 py-8">
+            <div class="w-full sm:max-w-sm bg-white dark:bg-[#111110] border border-gray-200 dark:border-gray-800 rounded-xl p-6 sm:p-8 shadow-sm">
                 {{ $slot }}
             </div>
         </div>
+
+        <!-- Guest Footer -->
+        <footer class="py-6 text-center text-xs text-gray-400">
+            &copy; {{ date('Y') }} UstaTop. {{ __('footer_rights') }}
+        </footer>
+
+        <script>
+            window.AUTHENTICATED = @json(auth()->check());
+            window.USER_THEME = @json(auth()->user()->theme ?? null);
+        </script>
     </body>
 </html>

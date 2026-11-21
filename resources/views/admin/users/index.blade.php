@@ -53,7 +53,7 @@
                 </form>
 
                 <div class="text-xs text-gray-500">
-                    Jami: <span class="font-bold text-gray-900 dark:text-white">{{ $users->total() }}</span> ta foydalanuvchi
+                    {{ __('Jami') }}: <span class="font-bold text-gray-900 dark:text-white">{{ $users->total() }}</span> {{ __('ta foydalanuvchi') }}
                 </div>
             </div>
 
@@ -63,13 +63,13 @@
                     <table class="w-full text-left border-collapse text-sm">
                         <thead>
                             <tr class="border-b border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-[#1f1f1d]/50 text-xs text-gray-500 uppercase tracking-wider">
-                                <th class="py-3.5 px-4 font-semibold">ID</th>
-                                <th class="py-3.5 px-4 font-semibold">Foydalanuvchi</th>
-                                <th class="py-3.5 px-4 font-semibold">Rol</th>
-                                <th class="py-3.5 px-4 font-semibold">Email Tasdiq</th>
-                                <th class="py-3.5 px-4 font-semibold">Telegram</th>
-                                <th class="py-3.5 px-4 font-semibold">Ro'yxatdan o'tgan</th>
-                                <th class="py-3.5 px-4 font-semibold text-right">Amallar</th>
+                                <th class="py-3.5 px-4 font-semibold">{{ __('ID') }}</th>
+                                <th class="py-3.5 px-4 font-semibold">{{ __('Foydalanuvchi') }}</th>
+                                <th class="py-3.5 px-4 font-semibold">{{ __('Rol') }}</th>
+                                <th class="py-3.5 px-4 font-semibold">{{ __('Email Tasdiq') }}</th>
+                                <th class="py-3.5 px-4 font-semibold">{{ __('Telegram') }}</th>
+                                <th class="py-3.5 px-4 font-semibold">{{ __('Ro\'yxatdan o\'tgan') }}</th>
+                                <th class="py-3.5 px-4 font-semibold text-right">{{ __('Amallar') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
@@ -107,24 +107,24 @@
                                             @method('PATCH')
                                             @if ($user->email_verified_at)
                                                 <button type="submit" title="{{ __('Tasdiqni bekor qilish') }}"
-                                                    class="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 hover:opacity-80">
-                                                    <span>✓</span> Tasdiqlangan
+                                                    class="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 hover:opacity-80">
+                                                    <span>✓</span> {{ __('Tasdiqlangan') }}
                                                 </button>
                                             @else
                                                 <button type="submit" title="{{ __('Emailni tasdiqlash') }}"
-                                                    class="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 hover:opacity-80">
-                                                    <span>✕</span> Tasdiqlanmagan
+                                                    class="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 hover:opacity-80">
+                                                    <span>✕</span> {{ __('Tasdiqlanmagan') }}
                                                 </button>
                                             @endif
                                         </form>
                                     </td>
                                     <td class="py-3 px-4">
                                         @if ($user->telegram_id)
-                                            <span class="inline-flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400">
-                                                <span>✈️</span> {{ $user->telegram_id }}
+                                            <span class="inline-flex items-center gap-1 text-xs font-mono text-gray-700 dark:text-gray-300">
+                                                <span class="text-[10px] font-semibold px-1 py-0.5 rounded bg-gray-100 dark:bg-gray-800">TG</span> {{ $user->telegram_id }}
                                             </span>
                                         @else
-                                            <span class="text-xs text-gray-400">Ulanmagan</span>
+                                            <span class="text-xs text-gray-400">{{ __('Ulanmagan') }}</span>
                                         @endif
                                     </td>
                                     <td class="py-3 px-4 text-xs text-gray-500">
@@ -133,11 +133,11 @@
                                     <td class="py-3 px-4 text-right">
                                         @if ($user->id !== auth()->id())
                                             <form method="POST" action="{{ route('admin.users.destroy', $user->id) }}"
-                                                onsubmit="return confirm('Haqiqatan ham bu foydalanuvchini o\'chirmoqchimisiz?')">
+                                                onsubmit="return confirm('{{ __('Haqiqatan ham bu foydalanuvchini o\'chirmoqchimisiz?') }}')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="text-xs text-red-600 hover:text-red-800 dark:hover:text-red-400 font-medium">
-                                                    O'chirish
+                                                    {{ __('O\'chirish') }}
                                                 </button>
                                             </form>
                                         @else

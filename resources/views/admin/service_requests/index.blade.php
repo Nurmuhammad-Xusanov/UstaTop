@@ -55,7 +55,7 @@
                 </form>
 
                 <div class="text-xs text-gray-500">
-                    Jami: <span class="font-bold text-gray-900 dark:text-white">{{ $requests->total() }}</span> ta buyurtma
+                    {{ __('Jami') }}: <span class="font-bold text-gray-900 dark:text-white">{{ $requests->total() }}</span> {{ __('ta buyurtma') }}
                 </div>
             </div>
 
@@ -65,14 +65,14 @@
                     <table class="w-full text-left border-collapse text-sm">
                         <thead>
                             <tr class="border-b border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-[#1f1f1d]/50 text-xs text-gray-500 uppercase tracking-wider">
-                                <th class="py-3.5 px-4 font-semibold">ID</th>
-                                <th class="py-3.5 px-4 font-semibold">Mijoz</th>
-                                <th class="py-3.5 px-4 font-semibold">Xizmat Sohasi</th>
-                                <th class="py-3.5 px-4 font-semibold">Usta (Ijrochi)</th>
-                                <th class="py-3.5 px-4 font-semibold">Shahar & Tel</th>
-                                <th class="py-3.5 px-4 font-semibold">Holat</th>
-                                <th class="py-3.5 px-4 font-semibold">Sana</th>
-                                <th class="py-3.5 px-4 font-semibold text-right">Amal</th>
+                                <th class="py-3.5 px-4 font-semibold">{{ __('ID') }}</th>
+                                <th class="py-3.5 px-4 font-semibold">{{ __('Mijoz') }}</th>
+                                <th class="py-3.5 px-4 font-semibold">{{ __('Xizmat Sohasi') }}</th>
+                                <th class="py-3.5 px-4 font-semibold">{{ __('Usta (Ijrochi)') }}</th>
+                                <th class="py-3.5 px-4 font-semibold">{{ __('Shahar & Tel') }}</th>
+                                <th class="py-3.5 px-4 font-semibold">{{ __('Holat') }}</th>
+                                <th class="py-3.5 px-4 font-semibold">{{ __('Sana') }}</th>
+                                <th class="py-3.5 px-4 font-semibold text-right">{{ __('Amal') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
@@ -80,12 +80,12 @@
                                 <tr class="hover:bg-gray-50/50 dark:hover:bg-[#1a1a19]/50 transition">
                                     <td class="py-3 px-4 font-mono text-xs text-gray-400">#{{ $req->id }}</td>
                                     <td class="py-3 px-4">
-                                        <div class="font-medium text-gray-900 dark:text-white">{{ $req->user->name ?? 'Noma\'lum' }}</div>
+                                        <div class="font-medium text-gray-900 dark:text-white">{{ $req->user->name ?? __('Noma\'lum') }}</div>
                                         <div class="text-xs text-gray-500">{{ $req->email ?? $req->user->email ?? '' }}</div>
                                     </td>
                                     <td class="py-3 px-4">
                                         <span class="inline-block px-2.5 py-0.5 text-xs rounded bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-medium">
-                                            {{ $req->category->name ?? 'Mavjud emas' }}
+                                            {{ $req->category->name ?? __('Mavjud emas') }}
                                         </span>
                                     </td>
                                     <td class="py-3 px-4">
@@ -93,7 +93,7 @@
                                             <div class="font-medium text-gray-900 dark:text-white">{{ $req->provider->name }}</div>
                                             <div class="text-xs text-gray-500">{{ $req->provider->email }}</div>
                                         @else
-                                            <span class="text-xs text-amber-600 dark:text-amber-400 font-medium">Biriktirilmagan</span>
+                                            <span class="text-xs text-amber-600 dark:text-amber-400 font-medium">{{ __('Biriktirilmagan') }}</span>
                                         @endif
                                     </td>
                                     <td class="py-3 px-4">
@@ -119,11 +119,11 @@
                                     </td>
                                     <td class="py-3 px-4 text-right">
                                         <form method="POST" action="{{ route('admin.service-requests.destroy', $req->id) }}"
-                                            onsubmit="return confirm('Haqiqatan ham bu buyurtmani o\'chirmoqchimisiz?')">
+                                            onsubmit="return confirm('{{ __('Haqiqatan ham bu buyurtmani o\'chirmoqchimisiz?') }}')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-xs text-red-600 hover:text-red-800 font-medium">
-                                                O'chirish
+                                                {{ __('O\'chirish') }}
                                             </button>
                                         </form>
                                     </td>
@@ -131,7 +131,7 @@
                             @empty
                                 <tr>
                                     <td colspan="8" class="py-8 text-center text-sm text-gray-500">
-                                        Hech qanday buyurtma topilmadi.
+                                        {{ __('Hech qanday buyurtma topilmadi.') }}
                                     </td>
                                 </tr>
                             @endforelse

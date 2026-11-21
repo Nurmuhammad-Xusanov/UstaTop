@@ -26,7 +26,6 @@ class ServiceRequestController extends Controller
 
         if ($user->role === 'provider') {
             $requests = ServiceRequests::where(function ($q) use ($user) {
-     
                 $q->where('status', 'pending')
                     ->whereHas('category', function ($q2) use ($user) {
                         $q2->whereIn(
@@ -36,7 +35,6 @@ class ServiceRequestController extends Controller
                     });
             })
                 ->orWhere(function ($q) use ($user) {
-    
                     $q->where('provider_id', $user->id)
                         ->whereIn('status', ['accepted', 'provider_done']);
                 })
@@ -44,6 +42,10 @@ class ServiceRequestController extends Controller
                 ->get();
 
             return view('service.provider_index', compact('requests'));
+        }
+
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.service-requests.index');
         }
 
         abort(403);
