@@ -28,6 +28,14 @@ RUN apk add --no-cache \
     bash \
     && docker-php-ext-install pdo pdo_pgsql pdo_mysql pdo_sqlite mbstring exif pcntl bcmath gd opcache zip
 
+# Configure PHP-FPM to preserve environment variables and stream worker output to Docker logs
+RUN { \
+    echo '[www]'; \
+    echo 'clear_env = no'; \
+    echo 'catch_workers_output = yes'; \
+    echo 'decorate_workers_output = no'; \
+} >> /usr/local/etc/php-fpm.d/zz-docker.conf
+
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
