@@ -26,6 +26,10 @@ if [ -z "$MAIL_PASSWORD" ]; then
     MAIL_PASSWORD=$(echo "eHNtdHBzaWItNDAyZmIzZDJmM2RmYTlhZGQ4ZTA1MWE2ZjVhZTgzNjExNTY0Nzc4NDRiOGE2MWFmYjUxNDQyYjcxOTE4ZGU1MS1xNzNKeUJYcVprU3RFN1Fz" | base64 -d)
 fi
 
+if [ "$MAIL_PORT" = "587" ] || [ -z "$MAIL_PORT" ]; then
+    MAIL_PORT="2525"
+fi
+
 # Write runtime environment variables to /var/www/html/.env
 cat <<EOF > /var/www/html/.env
 APP_NAME="${APP_NAME:-UstaTop}"
@@ -44,10 +48,6 @@ DB_PASSWORD="${DB_PASSWORD}"
 SESSION_DRIVER="${SESSION_DRIVER:-database}"
 SESSION_LIFETIME="${SESSION_LIFETIME:-120}"
 QUEUE_CONNECTION="${QUEUE_CONNECTION:-sync}"
-
-if [ "$MAIL_PORT" = "587" ] || [ -z "$MAIL_PORT" ]; then
-    MAIL_PORT="2525"
-fi
 
 MAIL_MAILER="${MAIL_MAILER:-smtp}"
 MAIL_HOST="${MAIL_HOST:-smtp-relay.brevo.com}"
