@@ -1,84 +1,171 @@
-# UstaTop — On-Demand Craftsman & Technician Service Platform
+<div align="center">
 
-**UstaTop** is a full-stack multi-role web platform designed to connect clients with verified local craftsmen and service technicians (electricians, plumbers, mechanics, electronics repairers, etc.).
+# UstaTop — Modern On-Demand Craftsman Platform
 
-Built with **Laravel 12**, **Blade Templates**, **Tailwind CSS**, and **PostgreSQL**.
+**A fast, minimalist, multilingual service marketplace connecting clients with verified local craftsmen across Uzbekistan.**
 
----
+[![Live Demo](https://img.shields.io/badge/Live_Demo-ustatop--lmze.onrender.com-0EA5E9?style=for-the-badge&logo=render)](https://ustatop-lmze.onrender.com)
+[![Telegram Bot](https://img.shields.io/badge/Telegram_Bot-@ustatpuzbot-229ED9?style=for-the-badge&logo=telegram)](https://t.me/ustatpuzbot)
+[![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=for-the-badge&logo=laravel)](https://laravel.com)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=for-the-badge&logo=postgresql)](https://postgresql.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
 
-## Features & Roles
+<br/>
 
-### 1. Client / User
-- Browse service categories and submit service requests with location, contact info, and job descriptions.
-- Monitor request lifecycle: `pending` → `accepted` → `provider_done` → `completed`.
-- Confirm job completion and manage profile themes (Light, Dark, System).
+**[🌐 Visit Live Website](https://ustatop-lmze.onrender.com)** &nbsp;|&nbsp; **[🤖 Open Telegram Bot](https://t.me/ustatpuzbot)** &nbsp;|&nbsp; **[📖 System Architecture](#system-architecture)**
 
-### 2. Service Provider (Craftsman)
-- Submit provider verification requests with phone, service city, and specialized trade categories.
-- Dashboard with real-time incoming service requests matching provider trade categories.
-- Accept service jobs, notify clients, and mark jobs as completed.
-
-### 3. Administrator
-- Administrative dashboard with statistics on users, active requests, and service volumes.
-- Review, approve, or reject provider applications.
-- Create and organize service categories.
+</div>
 
 ---
 
-## Tech Stack
+## 🌟 Overview & Key Features
 
-- **Backend Framework:** Laravel 12 (PHP 8.2+)
-- **Authentication & Starter:** Laravel Breeze
-- **Frontend / Styling:** Blade, Tailwind CSS, Vite
-- **Database:** PostgreSQL (with SQLite / MySQL compatibility)
-- **Containerization:** Docker, Nginx, PHP-FPM, Supervisord
+**UstaTop** is an enterprise-grade service marketplace platform engineered with **Laravel 12**, **Tailwind CSS**, and **PostgreSQL**. It streamlines finding, hiring, and verifying qualified tradespeople (plumbers, electricians, appliance technicians, HVAC specialists, carpenters, etc.) with end-to-end automation.
+
+### 1. 🌐 Dynamic Trilingual Localization (O'zbek, Русский, English)
+* **Full Multilingual Categories & Content:** Dynamic translations across Uzbek, Russian, and English for all trade categories and service items.
+* **Smart Browser Detection:** Detects visitor browser preference upon first load with fallback and instant header language switching.
+* **Cross-Language Order Dispatch:** If a client requests a service in English, craftsmen receive the dispatch in their own preferred language.
+
+### 2. 🤖 Telegram Bot Automation (`@ustatpuzbot`)
+* **Instant Order Broadcasting:** When a client places a service request, all verified craftsmen matching that specialty instantly receive a Telegram message with client details, location, and description.
+* **Interactive Bot Settings (`/settings`):** Craftsmen and clients can adjust language directly via inline keyboards (`🇺🇿 O'zbek`, `🇷🇺 Русский`, `🇬🇧 English`).
+* **Website Sync Mode:** Default automatic synchronization with the user's chosen site language (`sync_telegram_lang`).
+
+### 3. 🎨 Minimalist Dark/Light Mode with Zero-Flicker & Cross-Device Sync
+* **Minimalist Aesthetic:** Styled with high-contrast surfaces, clean borders, and cyan glow accents (`#0EA5E9`).
+* **Guest-to-User State Preservation:** Any theme selected by an unauthenticated guest persists immediately upon login or registration.
+* **Cross-Device Persistence:** Toggle dark mode on desktop, and your phone or tablet immediately renders dark mode.
+* **Account Preferences (`/profile`):** Clean management panel without clutter or emojis to configure Telegram bot sync and theme synchronization.
+
+### 4. 🔒 Enterprise Authentication & Fraud Prevention
+* **Google OAuth 2.0 Single Sign-On:** Fast, 1-click Google authentication.
+* **SMTP Email Verification (Brevo Relay):** Mandatory verification links for password registrations to eliminate fake accounts.
+* **Role-Based Access Control (RBAC):** Strict security gating for `client`, `provider` (craftsman), and `admin`.
+
+### 5. 🛠 Full Service Lifecycle Management
+* **Order Creation:** Client selects category, city, phone, and comments.
+* **Order Acceptance:** Qualified master accepts $\rightarrow$ status changes to `accepted`.
+* **Completion Verification:** Craftsman marks work done $\rightarrow$ Client receives notification to verify and confirm completion or re-open.
+
+### 6. 📊 Admin Control Center (`/admin/dashboard`)
+* **Real-time Metrics:** Live counts for total users, verified masters, active orders, and active user sessions.
+* **Master Verification Pipeline:** Review pending applications with full applicant profiles, contact info, and trade categories before approving or rejecting.
+* **Service Orders Supervision:** Real-time visibility into all platform requests.
 
 ---
 
-## How to Host 100% Free Live
+## 📸 Screenshots Showcase
 
-This repository is pre-configured with a production multi-stage `Dockerfile` and `render.yaml` blueprint for **100% free hosting**.
-
-### Method 1: Render.com (Recommended — 100% Free Forever)
-
-1. Create a free account at [render.com](https://render.com) (no credit card needed).
-2. Go to **Blueprints** -> Click **New Blueprint Instance**.
-3. Connect your GitHub account and select your **`UstaTop`** repository.
-4. Render will automatically read `render.yaml`, set up the free PostgreSQL database, build the Docker container, run migrations, and assign you a free HTTPS live URL (e.g. `https://ustatop.onrender.com`).
-5. Every time you run `git push origin main`, Render automatically rebuilds and updates your live site!
-
-### Method 2: Koyeb (Alternative Free Container Hosting)
-
-1. Create a free account at [koyeb.com](https://www.koyeb.com).
-2. Create a free serverless PostgreSQL database (via Neon.tech or Supabase).
-3. Connect your `UstaTop` GitHub repository, select Docker builder, and set your `DB_HOST`, `DB_PASSWORD`, `APP_KEY` environment variables.
+### 🖥️ Landing Page (Dark & Light)
+| Dark Mode (Minimalist & Cyan Accents) | Light Mode |
+| :---: | :---: |
+| ![Landing Page Dark](docs/screenshots/landing-dark.png) | ![Landing Page Light](docs/screenshots/landing-light.png) |
 
 ---
 
-## Local Development Setup
+### 🛡️ Admin Control Center & Analytics
+| Platform Overview & Statistics | Master Applications Pipeline (Pending Reviews) |
+| :---: | :---: |
+| ![Admin Dashboard](docs/screenshots/admin-dashboard.png) | ![Master Applications](docs/screenshots/admin-masters.png) |
+
+---
+
+### 📋 Service Requests & Profile Settings
+| Real-time Orders Management | Account & Synchronization Settings |
+| :---: | :---: |
+| ![Admin Service Requests](docs/screenshots/admin-services.png) | ![Profile Preferences](docs/screenshots/profile-preferences.png) |
+
+---
+
+## 🚀 Live Demo Credentials
+
+You can test user roles on the production deployment: **[https://ustatop-lmze.onrender.com](https://ustatop-lmze.onrender.com)**
+
+| Role | Email | Password | Permissions |
+| :--- | :--- | :--- | :--- |
+| **Craftsman (Master)** | `sherzod.svarka@ustatop.uz` | `1234567pas` | Provider dashboard, order acceptance, completion |
+| **Client** | `olim.vohidov@gmail.com` | `1234567pas` | Service requests, Telegram linking, order approval |
+
+---
+
+## 🏗️ System Architecture & Tech Stack
+
+```mermaid
+flowchart TD
+    Client["👤 Client / User"] -->|Creates Request| WebApp["🚀 UstaTop (Laravel 12 + Tailwind)"]
+    WebApp -->|Stores Data| DB[("🐘 PostgreSQL Database")]
+    WebApp -->|Dispatches Webhook| TG["🤖 Telegram Bot (@ustatpuzbot)"]
+    TG -->|Real-time Alert| Master["🛠 Verified Craftsman"]
+    Master -->|Accepts Job| WebApp
+    WebApp -->|Email Verification| Brevo["✉️ Brevo SMTP Relay"]
+    WebApp -->|One-Tap Login| GoogleAuth["🔑 Google OAuth 2.0"]
+    Admin["🛡️ Administrator"] -->|Supervises & Approves| AdminPanel["📊 Admin Control Center"]
+```
+
+* **Core Framework:** Laravel 12 on PHP 8.4
+* **Frontend:** Blade, Tailwind CSS 4, Alpine.js, Vite
+* **Database:** PostgreSQL 16
+* **Production Web Server:** Nginx + PHP-FPM + Supervisord inside Docker
+* **Hosting Infrastructure:** Render.com Dockerized Web Service
+
+---
+
+## 💻 Local Development Setup
+
+### Prerequisites
+* PHP 8.2 or higher
+* Composer 2.x
+* Node.js 20+ and npm
+* PostgreSQL or SQLite
+
+### Installation Steps
 
 ```bash
 # 1. Clone repository
 git clone https://github.com/Nurmuhammad-Xusanov/UstaTop.git
 cd UstaTop
 
-# 2. Install dependencies
+# 2. Install PHP and Node dependencies
 composer install
-npm install && npm run build
+npm install
 
-# 3. Environment configuration
+# 3. Environment Setup
 cp .env.example .env
 php artisan key:generate
 
-# 4. Run migrations
-php artisan migrate
+# 4. Configure Database in .env
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=ustatop
+DB_USERNAME=postgres
+DB_PASSWORD=secret
 
-# 5. Serve application
+# 5. Run Migrations & Seeders
+php artisan migrate --seed
+
+# 6. Build frontend assets
+npm run build
+
+# 7. Start local server
 php artisan serve
 ```
 
 ---
 
-## License
+## 📦 Automated Deployment (Render.com)
 
-Open-source project released under the [MIT License](LICENSE).
+This repository includes a multi-stage `Dockerfile` and `render.yaml` blueprint.
+
+1. Fork or clone this repository to your GitHub account.
+2. In [Render Dashboard](https://dashboard.render.com), click **New** $\rightarrow$ **Blueprint**.
+3. Select your repository.
+4. Render will automatically build the Docker image, run migrations, seed live demo data, and provision an SSL certificate.
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).

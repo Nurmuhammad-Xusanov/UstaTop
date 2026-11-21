@@ -102,7 +102,7 @@
 
                             <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
                                 {{ __('hero_title') }} <br>
-                                <span class="text-gray-500 dark:text-gray-400 font-normal">- <span class="text-accent">bir platformada</span></span>
+                                <span class="text-gray-500 dark:text-gray-400 font-normal">- <span class="text-accent">{{ __('hero_subtitle') }}</span></span>
                             </h1>
 
                             <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 max-w-xl mx-auto lg:mx-0 leading-relaxed">
@@ -135,9 +135,9 @@
 
                             <!-- Trust Metrics -->
                             <div class="flex items-center justify-center lg:justify-start gap-5 pt-3 text-[11px] text-gray-400">
-                                <div>&bull; Verified masters</div>
-                                <div>&bull; Telegram alerts</div>
-                                <div>&bull; 0% client fee</div>
+                                <div>&bull; {{ __('Tasdiqlangan ustalar') }}</div>
+                                <div>&bull; {{ __('Telegram bildirishnomalar') }}</div>
+                                <div>&bull; {{ __('0% mijoz komissiyasi') }}</div>
                             </div>
                         </div>
 

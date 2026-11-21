@@ -165,7 +165,7 @@ class DatabaseSeeder extends Seeder
                 ['email' => $m['email']],
                 [
                     'name' => $m['name'],
-                    'password' => Hash::make('password123'),
+                    'password' => Hash::make('1234567pas'),
                     'role' => 'provider',
                     'email_verified_at' => now(),
                     'theme' => 'system',
@@ -210,7 +210,7 @@ class DatabaseSeeder extends Seeder
                 ['email' => $app['email']],
                 [
                     'name' => $app['name'],
-                    'password' => Hash::make('password123'),
+                    'password' => Hash::make('1234567pas'),
                     'role' => 'client',
                     'email_verified_at' => now(),
                     'theme' => 'system',
@@ -244,7 +244,7 @@ class DatabaseSeeder extends Seeder
                 ['email' => $c['email']],
                 [
                     'name' => $c['name'],
-                    'password' => Hash::make('password123'),
+                    'password' => Hash::make('1234567pas'),
                     'role' => 'client',
                     'email_verified_at' => now(),
                     'theme' => 'system',

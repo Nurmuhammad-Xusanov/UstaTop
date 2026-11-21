@@ -222,5 +222,8 @@
     "Hisobni o'chirish": "Удалить аккаунт",
     "Hisobingiz o'chirilgandan so'ng, uning barcha resurslari va ma'lumotlari butunlay o'chiriladi. Hisobingizni o'chirishdan oldin, saqlamoqchi bo'lgan har qanday ma'lumot yoki ma'lumotni yuklab oling.": "После удаления вашего аккаунта все его ресурсы и данные будут удалены безвозвратно. Перед удалением сохраните все необходимые данные.",
     "Hisobingizni o'chirishga ishonchingiz komilmi?": "Вы уверены, что хотите удалить свой аккаунт?",
-    "Parol": "Пароль"
+    "Parol": "Пароль",
+    "Tasdiqlangan ustalar": "Проверенные мастера",
+    "Telegram bildirishnomalar": "Telegram-уведомления",
+    "0% mijoz komissiyasi": "0% комиссии с клиентов"
 }

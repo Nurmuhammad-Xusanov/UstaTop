@@ -222,5 +222,8 @@
     "Hisobni o'chirish": "Delete Account",
     "Hisobingiz o'chirilgandan so'ng, uning barcha resurslari va ma'lumotlari butunlay o'chiriladi. Hisobingizni o'chirishdan oldin, saqlamoqchi bo'lgan har qanday ma'lumot yoki ma'lumotni yuklab oling.": "Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.",
     "Hisobingizni o'chirishga ishonchingiz komilmi?": "Are you sure you want to delete your account?",
-    "Parol": "Password"
+    "Parol": "Password",
+    "Tasdiqlangan ustalar": "Verified craftsmen",
+    "Telegram bildirishnomalar": "Telegram notifications",
+    "0% mijoz komissiyasi": "0% client fee"
 }
