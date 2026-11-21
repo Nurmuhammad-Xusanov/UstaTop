@@ -50,6 +50,10 @@ Route::middleware('auth')->group(function () {
         '/service-requests/{serviceRequest}/confirm',
         [ServiceRequestController::class, 'clientConfirm']
     )->name('client.service-requests.confirm');
+    Route::post(
+        '/service-requests/{serviceRequest}/reject',
+        [ServiceRequestController::class, 'clientReject']
+    )->name('client.service-requests.reject');
     Route::post('/theme', [ProfileController::class, 'updateTheme'])->name('profile.updateTheme');
 });
 

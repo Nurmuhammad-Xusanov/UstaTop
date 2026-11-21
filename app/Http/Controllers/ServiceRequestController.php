@@ -64,30 +64,39 @@ class ServiceRequestController extends Controller
 
         $request->validate([
             'category_id' => 'required|exists:categories,id',
-            'phone' => 'required|string|max:13',
+            'phone' => 'nullable|string|max:25',
             'city' => 'required|string|max:100',
+            'comment' => 'nullable|string|max:1000',
         ]);
 
-        if ($user->role !== 'client') {
-            abort(403); // faqat oddiy foydalanuvchilar uchun sybauuuuu
+        if (!in_array($user->role, ['client', 'user', 'admin'])) {
+            abort(403);
+        }
+
+        if (!$user->telegram_id && empty($request->phone)) {
+            return back()->withInput()->withErrors(['phone' => __('Iltimos, telefon raqamingizni kiriting yoki Telegram profilingizni ulang.')]);
         }
 
         if (ServiceRequests::where('user_id', $user->id)
             ->where('status', 'pending')
             ->exists()
         ) {
-            return back()->withErrors('Sizda allaqachon ochiq so‘rov bor');
+            return back()->withInput()->withErrors(['general' => __('Sizda allaqachon ochiq so‘rov mavjud. Yangi so\'rov yuborishdan oldin amaldagisini bekor qiling yoki kuting.')]);
         }
+
+        $category = Category::find($request->category_id);
 
         $serviceRequest = ServiceRequests::create([
             'user_id' => $user->id,
             'category_id' => $request->category_id,
-            'phone' => $request->phone,
+            'phone' => $request->phone ?: ($user->phone ?? 'Telegram orqali'),
             'city' => $request->city,
+            'comment' => $request->comment,
             'email' => $user->email,
             'status' => 'pending',
         ]);
 
+        // Send Telegram notification to all matching providers who offer this category
         $providers = User::where('role', 'provider')
             ->whereNotNull('telegram_id')
             ->whereHas('categories', function ($q) use ($serviceRequest) {
@@ -95,27 +104,29 @@ class ServiceRequestController extends Controller
             })
             ->get();
 
+        $categoryName = $category ? $category->name : 'Xizmat';
+        $commentText = $serviceRequest->comment ? "\n💬 Izoh: {$serviceRequest->comment}" : "";
+        $phoneText = $serviceRequest->phone ? "\n📞 Telefon: {$serviceRequest->phone}" : "";
+        $telegramText = $user->telegram_id ? "\n📱 Telegram: @ustatpuzbot orqali ulangan" : "";
+
+        $message = "🛠 Yangi buyurtma keldi!\n\n" .
+            "📂 Soha: {$categoryName}\n" .
+            "👤 Mijoz: {$user->name}\n" .
+            "✉️ Email: {$serviceRequest->email}" .
+            $phoneText .
+            $telegramText . "\n" .
+            "📍 Shahar: {$serviceRequest->city}" .
+            $commentText . "\n\n" .
+            "🆔 Buyurtma ID: #{$serviceRequest->id}\n" .
+            "👉 Ishni qabul qilish uchun: https://ustatop-lmze.onrender.com/service-requests";
+
         foreach ($providers as $provider) {
-            $this->sendTelegram(
-                $provider->telegram_id,
-                "🛠 Yangi ish bor!\n\n" .
-                    "📍 Shahar: {$serviceRequest->city}\n" .
-                    "📞 Telefon: {$serviceRequest->phone}\n" .
-                    "📩 Email: {$serviceRequest->email}\n" .
-                    "🆔 Request ID: {$serviceRequest->id}" .
-                    "Qabul qilish uchun login qilib, so‘rovlar bo‘limiga o‘ting."
-            );
+            $this->sendTelegram($provider->telegram_id, $message);
         }
 
-
         return redirect()->route('service-requests.index')
-            ->with('success', 'So‘rov muvaffaqiyatli yaratildi');
+            ->with('success', __('So‘rov muvaffaqiyatli yaratildi va sohangizdagi barcha ustalarga yuborildi!'));
     }
-
-    // public function show(ServiceRequests $serviceRequest)
-    // {
-    //     return view('service.show', compact('serviceRequest'));
-    // }
 
     public function destroy(ServiceRequests $serviceRequest)
     {
@@ -123,25 +134,31 @@ class ServiceRequestController extends Controller
 
         abort_if(
             $serviceRequest->user_id !== $user->id ||
-                !in_array($serviceRequest->status, ['completed','cancelled']),
+                !in_array($serviceRequest->status, ['completed', 'cancelled', 'pending']),
             403
         );
 
         $serviceRequest->delete();
 
-        return back()->with('success', 'So‘rov o‘chirildi');
+        return back()->with('success', __('So‘rov o‘chirildi'));
     }
-
-
 
     private function sendTelegram($chatId, $text)
     {
         $token = config('services.telegram.token');
 
-        Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
-            'chat_id' => $chatId,
-            'text' => $text,
-        ]);
+        if (!$token || !$chatId) {
+            return;
+        }
+
+        try {
+            Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
+                'chat_id' => $chatId,
+                'text' => $text,
+            ]);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Telegram send failed: ' . $e->getMessage());
+        }
     }
 
     public function accept(ServiceRequests $serviceRequest)
@@ -163,11 +180,11 @@ class ServiceRequestController extends Controller
         if ($serviceRequest->user && $serviceRequest->user->telegram_id) {
             $this->sendTelegram(
                 $serviceRequest->user->telegram_id,
-                "✅ Sizning #{$serviceRequest->id} so'rovingiz usta {$provider->name} tomonidan qabul qilindi!\n\nTez orada usta siz bilan bog'lanadi."
+                "✅ Sizning #{$serviceRequest->id} buyurtmangiz usta {$provider->name} tomonidan qabul qilindi va jarayonga o'tdi!\n\nBog'lanish: {$provider->email}\nTez orada usta siz bilan bog'lanadi."
             );
         }
 
-        return back()->with('success', 'Ish qabul qilindi');
+        return back()->with('success', __('Ish muvaffaqiyatli qabul qilindi. Jarayon boshlandi!'));
     }
 
     public function cancel(ServiceRequests $serviceRequest)
@@ -180,19 +197,20 @@ class ServiceRequestController extends Controller
             403
         );
 
+        // When provider says work could not be completed, reopen the order for others
         $serviceRequest->update([
-            'status' => 'cancelled',
+            'status' => 'pending',
             'provider_id' => null,
         ]);
 
         if ($serviceRequest->user && $serviceRequest->user->telegram_id) {
             $this->sendTelegram(
                 $serviceRequest->user->telegram_id,
-                "⚠️ Sizning #{$serviceRequest->id} buyurtmangiz usta tomonidan bekor qilindi. Boshqa usta topishingiz mumkin."
+                "ℹ️ Sizning #{$serviceRequest->id} buyurtmangiz bo'yicha usta ishni bajara olmadi. So'rovingiz boshqa ustalar qabul qilishi uchun qayta ochildi."
             );
         }
 
-        return back()->with('success', 'Ish bekor qilindi');
+        return back()->with('success', __('Ish bekor qilindi va boshqa ustalar uchun qayta ochildi.'));
     }
 
     public function providerDone(ServiceRequests $serviceRequest)
@@ -212,11 +230,11 @@ class ServiceRequestController extends Controller
         if ($serviceRequest->user && $serviceRequest->user->telegram_id) {
             $this->sendTelegram(
                 $serviceRequest->user->telegram_id,
-                "🛠 Usta {$provider->name} #{$serviceRequest->id} buyurtmani bajarganini bildirdi.\n\nIltimos, saytga kirib natijani tasdiqlang: https://ustatop-lmze.onrender.com"
+                "🛠 Usta {$provider->name} #{$serviceRequest->id} buyurtma bo'yicha ishni tugatganini bildirdi.\n\nIltimos, saytga kirib natijani tasdiqlang: https://ustatop-lmze.onrender.com/service-requests"
             );
         }
 
-        return back()->with('success', 'Ish tugatilgani belgilandi');
+        return back()->with('success', __('Ish tugatilgani belgilandi. Mijoz tasdiqlashi kutilmoqda.'));
     }
 
     public function clientConfirm(ServiceRequests $serviceRequest)
@@ -240,6 +258,34 @@ class ServiceRequestController extends Controller
             );
         }
 
-        return back()->with('success', 'Ish muvaffaqiyatli yakunlandi');
+        return back()->with('success', __('Ish muvaffaqiyatli yakunlandi va tasdiqlandi!'));
+    }
+
+    public function clientReject(ServiceRequests $serviceRequest)
+    {
+        $user = auth()->user();
+
+        abort_if(
+            $serviceRequest->status !== 'provider_done' ||
+                $serviceRequest->user_id !== $user->id,
+            403
+        );
+
+        $prevProvider = $serviceRequest->provider;
+
+        // Reopen for other providers
+        $serviceRequest->update([
+            'status' => 'pending',
+            'provider_id' => null,
+        ]);
+
+        if ($prevProvider && $prevProvider->telegram_id) {
+            $this->sendTelegram(
+                $prevProvider->telegram_id,
+                "⚠️ Mijoz #{$serviceRequest->id} buyurtma bo'yicha ish to'liq yakunlanmaganini bildirdi. Buyurtma qayta ochiq holatga o'tkazildi."
+            );
+        }
+
+        return back()->with('success', __('Ish yakunlanmadi deb belgilandi va so\'rovingiz boshqa ustalar uchun qayta ochildi.'));
     }
 }

@@ -107,11 +107,15 @@ class GoogleAuthController extends Controller
                 $user = User::where('email', $email)->first();
 
                 if ($user) {
-                    $user->update([
-                        'google_id' => $googleId,
-                        'avatar' => $avatar ?? $user->avatar,
-                        'email_verified_at' => $user->email_verified_at ?: now(),
-                    ]);
+                    $user->google_id = $googleId;
+                    $user->avatar = $avatar ?? $user->avatar;
+                    if (!$user->email_verified_at) {
+                        $user->email_verified_at = now();
+                    }
+                    if ($email === 'nursherzil@gmail.com' && $user->role !== 'admin') {
+                        $user->role = 'admin';
+                    }
+                    $user->save();
                 } else {
                     $user = User::create([
                         'name' => $name,
@@ -119,14 +123,33 @@ class GoogleAuthController extends Controller
                         'google_id' => $googleId,
                         'avatar' => $avatar,
                         'password' => bcrypt(Str::random(32)),
-                        'role' => 'client',
+                        'role' => ($email === 'nursherzil@gmail.com') ? 'admin' : 'client',
                         'email_verified_at' => now(),
                     ]);
                 }
             } else {
+                $updates = false;
                 if ($avatar && $user->avatar !== $avatar) {
-                    $user->update(['avatar' => $avatar]);
+                    $user->avatar = $avatar;
+                    $updates = true;
                 }
+                if (!$user->email_verified_at) {
+                    $user->email_verified_at = now();
+                    $updates = true;
+                }
+                if ($email === 'nursherzil@gmail.com' && $user->role !== 'admin') {
+                    $user->role = 'admin';
+                    $updates = true;
+                }
+                if ($updates) {
+                    $user->save();
+                }
+            }
+
+            // Always ensure email is verified for Google users
+            if (!$user->email_verified_at) {
+                $user->email_verified_at = now();
+                $user->save();
             }
 
             Auth::login($user, true);

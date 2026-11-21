@@ -87,6 +87,9 @@
                                         <span class="inline-block px-2.5 py-0.5 text-xs rounded bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-medium">
                                             {{ $req->category->name ?? __('Mavjud emas') }}
                                         </span>
+                                        @if ($req->comment)
+                                            <div class="text-[11px] text-gray-500 italic mt-1 line-clamp-2 max-w-[200px]" title="{{ $req->comment }}">"{{ $req->comment }}"</div>
+                                        @endif
                                     </td>
                                     <td class="py-3 px-4">
                                         @if ($req->provider)

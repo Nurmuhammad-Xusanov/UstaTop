@@ -12,6 +12,7 @@ class ServiceRequests extends Model
         'provider_id',
         'phone',
         'city',
+        'comment',
         'email',
         'status',
     ];

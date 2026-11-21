@@ -37,6 +37,9 @@
                         <div class="mt-2 text-xs text-gray-500 dark:text-gray-400 space-y-1">
                             <div><span class="text-gray-400">{{ __('Shahar') }}:</span> {{ $request->city }}</div>
                             <div><span class="text-gray-400">{{ __('Telefon') }}:</span> {{ $request->phone }}</div>
+                            @if ($request->comment)
+                                <div><span class="text-gray-400">{{ __('Mijoz izohi') }}:</span> <span class="italic text-gray-700 dark:text-gray-300">"{{ $request->comment }}"</span></div>
+                            @endif
                             @if ($request->provider)
                                 <div><span class="text-gray-400">{{ __('Usta') }}:</span> {{ $request->provider->name }} ({{ $request->provider->email }})</div>
                             @endif
@@ -47,20 +50,30 @@
                         @if ($request->status === 'provider_done' && $request->user_id === auth()->id())
                             <form method="POST" action="{{ route('client.service-requests.confirm', $request) }}">
                                 @csrf
-                                <button class="px-3 py-1.5 text-xs font-semibold rounded-md border border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition duration-200">
-                                    {{ __('Ish tugadi (Tasdiqlash)') }}
+                                <button type="submit" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500 hover:text-white transition duration-200 cursor-pointer">
+                                    ✓ {{ __('Ish bitdi (Tasdiqlash)') }}
+                                </button>
+                            </form>
+
+                            <form method="POST" action="{{ route('client.service-requests.reject', $request) }}"
+                                onsubmit="return confirm('{{ __('Ish to\'liq bitmadimi? So\'rov yana boshqa ustalar uchun qayta ochiladi.') }}')">
+                                @csrf
+                                <button type="submit" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500 hover:text-white transition duration-200 cursor-pointer">
+                                    ✕ {{ __('Ish yakunlanmadi (Qayta ochiq qilish)') }}
                                 </button>
                             </form>
                         @endif
 
-                        <form method="POST" action="{{ route('service-requests.destroy', $request) }}"
-                            onsubmit="return confirm('{{ __('Ishonchingiz komilmi?') }}')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="px-3 py-1.5 text-xs font-medium rounded-md border border-gray-200 dark:border-gray-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition duration-200">
-                                {{ __('O\'chirish') }}
-                            </button>
-                        </form>
+                        @if (in_array($request->status, ['completed', 'cancelled', 'pending']))
+                            <form method="POST" action="{{ route('service-requests.destroy', $request) }}"
+                                onsubmit="return confirm('{{ __('Ishonchingiz komilmi?') }}')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="px-3 py-1.5 text-xs font-medium rounded-lg border border-gray-200 dark:border-gray-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition duration-200 cursor-pointer">
+                                    {{ $request->status === 'pending' ? __('Bekor qilish') : __('O\'chirish') }}
+                                </button>
+                            </form>
+                        @endif
                     </div>
                 </div>
             @empty

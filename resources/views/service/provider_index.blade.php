@@ -31,9 +31,13 @@
                             </span>
                         </div>
                         <div class="mt-2 text-xs text-gray-500 dark:text-gray-400 space-y-1">
-                            <div><span class="text-gray-400">{{ __('Mijoz') }}:</span> {{ $request->user->name ?? __('Noma\'lum') }}</div>
+                            <div><span class="text-gray-400">{{ __('Mijoz') }}:</span> <span class="font-medium text-gray-900 dark:text-white">{{ $request->user->name ?? __('Noma\'lum') }}</span></div>
+                            <div><span class="text-gray-400">{{ __('Email') }}:</span> <span class="font-mono text-gray-700 dark:text-gray-300">{{ $request->email ?? ($request->user->email ?? '') }}</span></div>
+                            <div><span class="text-gray-400">{{ __('Telefon') }}:</span> <span class="font-mono text-gray-700 dark:text-gray-300">{{ $request->phone }}</span></div>
                             <div><span class="text-gray-400">{{ __('Shahar') }}:</span> {{ $request->city }}</div>
-                            <div><span class="text-gray-400">{{ __('Telefon') }}:</span> {{ $request->phone }}</div>
+                            @if ($request->comment)
+                                <div><span class="text-gray-400">{{ __('Mijoz izohi') }}:</span> <span class="italic text-gray-700 dark:text-gray-300">"{{ $request->comment }}"</span></div>
+                            @endif
                         </div>
                     </div>
 
@@ -42,7 +46,7 @@
                         @if ($request->status === 'pending')
                             <form method="POST" action="{{ route('provider.service-requests.accept', $request) }}">
                                 @csrf
-                                <button class="px-3.5 py-1.5 text-xs font-semibold rounded-md border border-accent/40 bg-accent/10 text-accent hover:bg-accent hover:text-white dark:hover:text-black hover:shadow-[0_0_15px_rgba(14,165,233,0.3)] transition duration-200">
+                                <button type="submit" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg border border-accent/40 bg-accent/10 text-accent hover:bg-accent hover:text-white dark:hover:text-black hover:shadow-[0_0_15px_rgba(14,165,233,0.3)] transition duration-200 cursor-pointer">
                                     {{ __('Qabul qilish') }}
                                 </button>
                             </form>
@@ -52,15 +56,16 @@
                         @if ($request->status === 'accepted' && $request->provider_id === auth()->id())
                             <form method="POST" action="{{ route('provider.service-requests.done', $request) }}">
                                 @csrf
-                                <button class="px-3.5 py-1.5 text-xs font-semibold rounded-md border border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition duration-200">
-                                    {{ __('Ishni tugatdim') }}
+                                <button type="submit" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500 hover:text-white transition duration-200 cursor-pointer">
+                                    ✓ {{ __('Ishni tugatdim') }}
                                 </button>
                             </form>
 
-                            <form method="POST" action="{{ route('provider.service-requests.cancel', $request) }}">
+                            <form method="POST" action="{{ route('provider.service-requests.cancel', $request) }}"
+                                onsubmit="return confirm('{{ __('Ishni yakunlay olmadingizmi? Buyurtma boshqa ustalar uchun qayta ochiladi.') }}')">
                                 @csrf
-                                <button class="px-3 py-1.5 text-xs font-medium rounded-md border border-gray-200 dark:border-gray-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition duration-200">
-                                    {{ __('Bekor qilish') }}
+                                <button type="submit" class="px-3.5 py-1.5 text-xs font-medium rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-500 hover:text-white transition duration-200 cursor-pointer">
+                                    ✕ {{ __('Ish yakunlanmadi') }}
                                 </button>
                             </form>
                         @endif
