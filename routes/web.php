@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProviderRequestController;
 use App\Http\Controllers\AdminDashboardController;
-use App\Http\Controllers\CategoriesControlelr;
+use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ServiceRequestController;
 
 Route::get('/', function () {
@@ -44,7 +44,8 @@ Route::middleware(['auth', 'admin'])
             'provider-requests',
             ProviderRequestController::class
         )->only(['index', 'show', 'update', 'destroy',]);
-        Route::resource('categories', CategoriesControlelr::class);
+        Route::resource('categories', CategoriesController::class)
+            ->only(['index', 'create', 'store', 'destroy']);
     });
 Route::middleware(['auth', 'provider'])
     ->prefix('provider')

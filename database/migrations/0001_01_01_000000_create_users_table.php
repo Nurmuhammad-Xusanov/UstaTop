@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('role')->default('client');
             $table->bigInteger('telegram_id')->nullable()->unique();
-            $table->string('theme')->default('system')->after('telegram_id');
+            $table->string('theme')->default('system');
             $table->rememberToken();
             $table->timestamps();
         });

@@ -17,12 +17,13 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->foreignId('provider_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('phone')->nullable();
-            $table->string('city')->nullable;
+            $table->string('city')->nullable();
             $table->string('email')->nullable();
 
             $table->enum('status', [
                 'pending',    
-                'accepted',    
+                'accepted',
+                'provider_done',
                 'completed',   
                 'cancelled'    
             ])->default('pending');
@@ -35,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('service_request');
+        Schema::dropIfExists('service_requests');
     }
 };
