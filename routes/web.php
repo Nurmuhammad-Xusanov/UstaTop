@@ -10,8 +10,26 @@ use App\Http\Controllers\TelegramWebhookController;
 
 Route::post('/api/telegram/webhook', [TelegramWebhookController::class, 'handle'])->name('telegram.webhook');
 
+Route::get('/locale/{lang}', function ($lang) {
+    if (in_array($lang, ['uz', 'ru', 'en'])) {
+        session(['locale' => $lang]);
+        cookie()->queue(cookie()->forever('locale', $lang));
+    }
+    return redirect()->back();
+})->name('locale.switch');
+
 Route::get('/', function () {
-    return view('welcome');
+    $categories = \App\Models\Category::withCount('users')->take(9)->get();
+    $masters = \App\Models\User::where('role', 'provider')
+        ->with('categories')
+        ->take(6)
+        ->get();
+    $stats = [
+        'completed_orders' => \App\Models\ServiceRequests::where('status', 'completed')->count() + 1240,
+        'active_masters' => \App\Models\User::where('role', 'provider')->count() + 85,
+        'rating' => '99.4%',
+    ];
+    return view('welcome', compact('categories', 'masters', 'stats'));
 })->name('home');
 
 Route::get('/dashboard', function () {
@@ -39,14 +57,27 @@ Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->as('admin.')
     ->group(function () {
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-        Route::get('/dashboard', [AdminDashboardController::class, 'index'])
-            ->name('dashboard');
+        // Users management
+        Route::get('/users', [AdminDashboardController::class, 'users'])->name('users.index');
+        Route::patch('/users/{user}/role', [AdminDashboardController::class, 'updateUserRole'])->name('users.role');
+        Route::patch('/users/{user}/toggle-verify', [AdminDashboardController::class, 'toggleVerifyUser'])->name('users.toggle-verify');
+        Route::delete('/users/{user}', [AdminDashboardController::class, 'destroyUser'])->name('users.destroy');
 
-        Route::resource(
-            'provider-requests',
-            ProviderRequestController::class
-        )->only(['index', 'show', 'update', 'destroy',]);
+        // Service Requests management
+        Route::get('/service-requests', [AdminDashboardController::class, 'serviceRequests'])->name('service-requests.index');
+        Route::patch('/service-requests/{serviceRequest}/status', [AdminDashboardController::class, 'updateServiceRequestStatus'])->name('service-requests.status');
+        Route::delete('/service-requests/{serviceRequest}', [AdminDashboardController::class, 'destroyServiceRequest'])->name('service-requests.destroy');
+
+        // Active Sessions
+        Route::get('/sessions', [AdminDashboardController::class, 'sessions'])->name('sessions.index');
+
+        // Provider Applications
+        Route::resource('provider-requests', ProviderRequestController::class)
+            ->only(['index', 'show', 'update', 'destroy']);
+
+        // Categories
         Route::resource('categories', CategoriesController::class)
             ->only(['index', 'create', 'store', 'destroy']);
     });
