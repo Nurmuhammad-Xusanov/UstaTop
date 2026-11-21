@@ -30,6 +30,21 @@ class TelegramWebhookController extends Controller
             $user = User::where('telegram_id', $chatId)->first();
 
             if ($user && $chatId) {
+                if ($data === 'unlink_account') {
+                    $user->telegram_id = null;
+                    $user->save();
+
+                    $alertText = match($user->locale) {
+                        'en' => '✅ Account disconnected successfully.',
+                        'ru' => '✅ Аккаунт успешно отвязан.',
+                        default => "✅ Hisob muvaffaqiyatli uzildi."
+                    };
+
+                    $this->answerCallbackQuery($token, $callbackId, $alertText);
+                    $this->sendOrEditSettingsMessage($token, $chatId, null, $messageId);
+                    return response()->json(['status' => 'account_unlinked']);
+                }
+
                 if ($data === 'toggle_sync') {
                     $user->sync_telegram_lang = !$user->sync_telegram_lang;
                     if ($user->sync_telegram_lang) {
@@ -88,6 +103,23 @@ class TelegramWebhookController extends Controller
         if (str_starts_with($text, '/settings') || str_contains(mb_strtolower($text), 'settings') || str_contains(mb_strtolower($text), 'sozlamalar') || str_contains(mb_strtolower($text), 'настройки')) {
             $this->sendOrEditSettingsMessage($token, $chatId, $user);
             return response()->json(['status' => 'settings_sent']);
+        }
+
+        // Command: /unlink (disconnect account)
+        if (str_starts_with($text, '/unlink') || str_contains(mb_strtolower($text), 'unlink') || str_contains(mb_strtolower($text), 'uzish') || str_contains(mb_strtolower($text), 'отвязать')) {
+            if ($user) {
+                $user->telegram_id = null;
+                $user->save();
+                $msg = $locale === 'en'
+                    ? "✅ Your Telegram account has been disconnected from UstaTop."
+                    : ($locale === 'ru'
+                        ? "✅ Ваш Telegram аккаунт успешно отвязан от UstaTop."
+                        : "✅ Telegram hisobingiz UstaTop profilingizdan muvaffaqiyatli uzildi.");
+            } else {
+                $msg = $locale === 'en' ? "ℹ️ No account currently linked." : ($locale === 'ru' ? "ℹ️ Нет привязанного аккаунта." : "ℹ️ Hech qanday hisob ulanmagan.");
+            }
+            $this->sendMessage($token, $chatId, $msg, '', $this->getMainReplyKeyboard($locale));
+            return response()->json(['status' => 'unlinked']);
         }
 
         // Command: /status or button "📋 Status"
@@ -179,12 +211,32 @@ class TelegramWebhookController extends Controller
             }
 
             if (!$userId) {
-                $welcome = "👋 <b>Assalomu alaykum! Xush kelibsiz UstaTop botiga!</b>\n\n" .
-                           "UstaTop — O'zbekiston bo'ylab uyingiz va ofisingiz uchun malakali ustalarni topish platformasi.\n\n" .
-                           "🔹 Santexnika, elektr montaj, mebel, konditsioner va boshqa 10+ xizmatlar\n" .
-                           "🔹 Real vaqtda buyurtma xabarnomalari\n\n" .
-                           "🔗 Profilingizni ulash uchun saytga kiring va Profilingizdan <b>'Telegramni ulash'</b> tugmasini bosing.\n\n" .
-                           "🌐 <b>Saytga kirish:</b> https://ustatop-lmze.onrender.com";
+                $fromLang = $message['from']['language_code'] ?? 'uz';
+                $welcomeLocale = str_starts_with($fromLang, 'ru') ? 'ru' : (str_starts_with($fromLang, 'en') ? 'en' : 'uz');
+
+                if ($welcomeLocale === 'en') {
+                    $welcome = "👋 <b>Welcome to UstaTop bot!</b>\n\n" .
+                               "UstaTop is Uzbekistan's premier marketplace for verified local craftsmen and service technicians.\n\n" .
+                               "🔹 Plumbing, electrical, appliances, AC & 10+ services\n" .
+                               "🔹 Real-time order dispatch notifications\n\n" .
+                               "🔗 To link your account automatically, log in to the website and click <b>'Connect Telegram'</b> on your Dashboard or Profile.\n\n" .
+                               "🌐 <b>Website:</b> https://ustatop-lmze.onrender.com";
+                } elseif ($welcomeLocale === 'ru') {
+                    $welcome = "👋 <b>Добро пожаловать в бот UstaTop!</b>\n\n" .
+                               "UstaTop — платформа для поиска проверенных мастеров и специалистов по всему Узбекистану.\n\n" .
+                               "🔹 Сантехника, электрика, бытовая техника, кондиционеры и 10+ услуг\n" .
+                               "🔹 Мгновенные уведомления о заказах\n\n" .
+                               "🔗 Чтобы связать аккаунт, войдите на сайт и нажмите <b>'Привязать Telegram'</b> в панели или профиле.\n\n" .
+                               "🌐 <b>Сайт:</b> https://ustatop-lmze.onrender.com";
+                } else {
+                    $welcome = "👋 <b>Assalomu alaykum! Xush kelibsiz UstaTop botiga!</b>\n\n" .
+                               "UstaTop — O'zbekiston bo'ylab uyingiz va ofisingiz uchun malakali ustalarni topish platformasi.\n\n" .
+                               "🔹 Santexnika, elektr montaj, mebel, konditsioner va boshqa 10+ xizmatlar\n" .
+                               "🔹 Real vaqtda buyurtma xabarnomalari\n\n" .
+                               "🔗 Profilingizni ulash uchun saytga kiring va <b>'Telegramni ulash'</b> tugmasini bosing.\n\n" .
+                               "🌐 <b>Saytga kirish:</b> https://ustatop-lmze.onrender.com";
+                }
+
                 $this->sendMessage($token, $chatId, $welcome, 'HTML', [
                     'inline_keyboard' => [
                         [
@@ -272,9 +324,22 @@ class TelegramWebhookController extends Controller
             default => '🇺🇿 O\'zbekcha',
         };
 
+        $accountLine = $user
+            ? ($locale === 'en'
+                ? "👤 <b>Linked Profile:</b> {$user->name} ({$user->email})\n\n"
+                : ($locale === 'ru'
+                    ? "👤 <b>Привязанный профиль:</b> {$user->name} ({$user->email})\n\n"
+                    : "👤 <b>Bog'langan profil:</b> {$user->name} ({$user->email})\n\n"))
+            : ($locale === 'en'
+                ? "👤 <b>Linked Profile:</b> Not connected\n\n"
+                : ($locale === 'ru'
+                    ? "👤 <b>Привязанный профиль:</b> Не привязан\n\n"
+                    : "👤 <b>Bog'langan profil:</b> Ulanmagan\n\n"));
+
         if ($locale === 'en') {
             $syncBadge = $sync ? '✅ ON (Synced with site)' : '❌ OFF (Independent)';
             $text = "⚙️ <b>Settings & Language</b>\n\n" .
+                   $accountLine .
                    "🌐 <b>Current Bot Language:</b> {$activeLangName}\n" .
                    "🔄 <b>Sync with Website Language:</b> {$syncBadge}\n\n" .
                    "<i>When sync is enabled, changing language on the website will automatically change the bot language.</i>";
@@ -282,29 +347,44 @@ class TelegramWebhookController extends Controller
         } elseif ($locale === 'ru') {
             $syncBadge = $sync ? '✅ ВКЛ (Синхрон с сайтом)' : '❌ ВЫКЛ (Отдельно)';
             $text = "⚙️ <b>Настройки и Язык</b>\n\n" .
+                   $accountLine .
                    "🌐 <b>Текущий язык бота:</b> {$activeLangName}\n" .
                    "🔄 <b>Синхронизация с сайтом:</b> {$syncBadge}\n\n" .
                    "<i>При включенной синхронизации с сайтом язык бота автоматически меняется при смене языка на сайте.</i>";
             $syncBtnText = $sync ? "🔄 Синхронизация с сайтом: ✅" : "🔄 Синхронизация с сайтом: ❌";
         } else {
             $text = "⚙️ <b>Sozlamalar va Til</b>\n\n" .
+                   $accountLine .
                    "🌐 <b>Joriy bot tili:</b> {$activeLangName}\n" .
                    "🔄 <b>Sayt bilan sinxronlash:</b> {$syncBadge}\n\n" .
                    "<i>Sinxronlash yoqilgan bo'lsa, saytda til o'zgarganda bot ham avtomatik o'sha tilda gapiradi.</i>";
             $syncBtnText = $sync ? "🔄 Sayt bilan sinxronlash: ✅" : "🔄 Sayt bilan sinxronlash: ❌";
         }
 
-        $replyMarkup = [
-            'inline_keyboard' => [
-                [
-                    ['text' => $syncBtnText, 'callback_data' => 'toggle_sync']
-                ],
-                [
-                    ['text' => '🇺🇿 O\'zbek', 'callback_data' => 'set_lang_uz'],
-                    ['text' => '🇷🇺 Русский', 'callback_data' => 'set_lang_ru'],
-                    ['text' => '🇬🇧 English', 'callback_data' => 'set_lang_en'],
-                ]
+        $inlineKeyboard = [
+            [
+                ['text' => $syncBtnText, 'callback_data' => 'toggle_sync']
+            ],
+            [
+                ['text' => '🇺🇿 O\'zbek', 'callback_data' => 'set_lang_uz'],
+                ['text' => '🇷🇺 Русский', 'callback_data' => 'set_lang_ru'],
+                ['text' => '🇬🇧 English', 'callback_data' => 'set_lang_en'],
             ]
+        ];
+
+        if ($user) {
+            $unlinkBtnText = $locale === 'en' ? '❌ Disconnect Website Account' : ($locale === 'ru' ? '❌ Отвязать от сайта' : '❌ Saytdagi hisobni uzish');
+            $inlineKeyboard[] = [
+                ['text' => $unlinkBtnText, 'callback_data' => 'unlink_account']
+            ];
+        } else {
+            $inlineKeyboard[] = [
+                ['text' => ($locale === 'en' ? '🌐 Open UstaTop Website' : ($locale === 'ru' ? '🌐 Открыть сайт UstaTop' : '🌐 UstaTop Saytiga o\'tish')), 'url' => 'https://ustatop-lmze.onrender.com']
+            ];
+        }
+
+        $replyMarkup = [
+            'inline_keyboard' => $inlineKeyboard
         ];
 
         if ($messageId) {

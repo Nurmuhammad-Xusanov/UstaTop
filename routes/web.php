@@ -63,6 +63,7 @@ Route::middleware('auth')->group(function () {
         [ServiceRequestController::class, 'clientReject']
     )->name('client.service-requests.reject');
     Route::patch('/profile/preferences', [ProfileController::class, 'updatePreferences'])->name('profile.preferences');
+    Route::delete('/profile/telegram', [ProfileController::class, 'disconnectTelegram'])->name('profile.telegram.disconnect');
     Route::post('/theme', [ProfileController::class, 'updateTheme'])->name('profile.updateTheme');
 });
 

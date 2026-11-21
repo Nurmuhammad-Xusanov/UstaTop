@@ -107,4 +107,18 @@ class ProfileController extends Controller
 
         return Redirect::route('profile.edit')->with('status', 'preferences-updated');
     }
+
+    /**
+     * Disconnect the user's Telegram account.
+     */
+    public function disconnectTelegram(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+        if ($user) {
+            $user->telegram_id = null;
+            $user->save();
+        }
+
+        return Redirect::route('profile.edit')->with('status', 'telegram-disconnected');
+    }
 }      

@@ -42,6 +42,46 @@
             </label>
         </div>
 
+        <!-- Telegram Connection Status & Disconnect -->
+        <div class="p-4 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-[#161615]">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                    <span class="text-sm font-medium text-gray-900 dark:text-white">
+                        {{ __('Telegram hisobi') }}
+                    </span>
+                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                        @if ($user->telegram_id)
+                            <span class="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                {{ __('Ulangan') }} (ID: {{ $user->telegram_id }})
+                            </span>
+                        @else
+                            <span class="inline-flex items-center gap-1.5 text-gray-500 dark:text-gray-400">
+                                <span class="w-2 h-2 rounded-full bg-gray-400"></span>
+                                {{ __('Ulanmagan') }}
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                <div>
+                    @if ($user->telegram_id)
+                        <button type="button"
+                            onclick="if(confirm('{{ __('Telegram hisobini uzishga ishonchingiz komilmi?') }}')) document.getElementById('disconnect-telegram-form').submit();"
+                            class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-500 hover:text-white transition duration-200 cursor-pointer">
+                            {{ __('Telegram hisobini uzish') }}
+                        </button>
+                    @else
+                        <a href="https://t.me/{{ config('services.telegram.bot_username', 'ustatpuzbot') }}?start={{ $user->id }}"
+                            target="_blank"
+                            class="inline-flex items-center px-3 py-1.5 text-xs font-semibold rounded-lg border border-accent/40 bg-accent/10 text-accent hover:bg-accent hover:text-white dark:hover:text-black transition duration-200">
+                            {{ __('Telegramni ulash') }} &rarr;
+                        </a>
+                    @endif
+                </div>
+            </div>
+        </div>
+
         <!-- Telegram Language Sync Checkbox -->
         <div class="p-4 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-[#161615]">
             <label class="flex items-start gap-3 cursor-pointer">
@@ -83,6 +123,21 @@
                     class="text-sm text-green-600 dark:text-green-400 font-medium"
                 >{{ __('Sozlamalar saqlandi.') }}</p>
             @endif
+
+            @if (session('status') === 'telegram-disconnected')
+                <p
+                    x-data="{ show: true }"
+                    x-show="show"
+                    x-transition
+                    x-init="setTimeout(() => show = false, 2500)"
+                    class="text-sm text-rose-600 dark:text-rose-400 font-medium"
+                >{{ __('Telegram hisobi muvaffaqiyatli uzildi.') }}</p>
+            @endif
         </div>
+    </form>
+
+    <form id="disconnect-telegram-form" method="post" action="{{ route('profile.telegram.disconnect') }}" class="hidden">
+        @csrf
+        @method('delete')
     </form>
 </section>
