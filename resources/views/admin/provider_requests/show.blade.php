@@ -35,7 +35,7 @@
                     };
                 @endphp
                 <span class="px-3 py-1 text-xs font-semibold uppercase tracking-wider rounded-lg border {{ $reqBadgeClass }}">
-                    {{ $providerRequest->status }}
+                    {{ __('status_' . $providerRequest->status) }}
                 </span>
             </div>
 
@@ -50,7 +50,7 @@
                 </div>
                 <div>
                     <span class="text-gray-400 uppercase tracking-wider text-[10px]">{{ __('telegram_col') }}</span>
-                    <div class="text-gray-900 dark:text-white font-mono mt-1">{{ $providerRequest->user->telegram_id ?? 'Ulanmagan' }}</div>
+                    <div class="text-gray-900 dark:text-white font-mono mt-1">{{ $providerRequest->user->telegram_id ?? __('Ulanmagan') }}</div>
                 </div>
                 <div>
                     <span class="text-gray-400 uppercase tracking-wider text-[10px]">{{ __('created_at_col') }}</span>
@@ -66,7 +66,7 @@
                             {{ $category->name }}
                         </span>
                     @empty
-                        <span class="text-xs text-gray-400">Soha ko'rsatilmagan</span>
+                        <span class="text-xs text-gray-400">{{ __('Soha ko\'rsatilmagan') }}</span>
                     @endforelse
                 </div>
             </div>
@@ -99,7 +99,7 @@
                 </div>
 
                 <form method="POST" action="{{ route('admin.provider-requests.destroy', $providerRequest) }}"
-                    onsubmit="return confirm('Haqiqatan ham bu arizani o\'chirmoqchimisiz?')">
+                    onsubmit="return confirm('{{ __('Haqiqatan ham bu arizani o\'chirmoqchimisiz?') }}')">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="text-xs text-red-600 hover:text-red-800 dark:hover:text-red-400">

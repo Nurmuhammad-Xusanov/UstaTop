@@ -27,7 +27,7 @@
                                 };
                             @endphp
                             <span class="inline-block px-2.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider border {{ $statusClasses }}">
-                                {{ $request->status }}
+                                {{ __('status_' . $request->status) }}
                             </span>
                         </div>
                         <div class="mt-2 text-xs text-gray-500 dark:text-gray-400 space-y-1">

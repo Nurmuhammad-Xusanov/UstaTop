@@ -16,14 +16,14 @@
     <div class="py-6 max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-4">
         @if (session('success'))
             <div class="p-3 bg-gray-50 dark:bg-[#161615] border border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-200 rounded text-xs">
-                {{ session('success') }}
+                {{ __(session('success')) }}
             </div>
         @endif
 
         @if ($errors->any())
             <div class="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-red-800 dark:text-red-300 rounded text-xs">
                 @foreach ($errors->all() as $err)
-                    <p>{{ $err }}</p>
+                    <p>{{ __($err) }}</p>
                 @endforeach
             </div>
         @endif
@@ -64,13 +64,13 @@
                                         };
                                     @endphp
                                     <span class="inline-block px-2.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider border {{ $badgeClasses }}">
-                                        {{ $request->status }}
+                                        {{ __('status_' . $request->status) }}
                                     </span>
                                 </td>
                                 <td class="py-3 px-4 text-right">
                                     @if ($request->status === 'pending')
                                         <form method="POST" action="{{ route('provider-requests.destroy', $request) }}"
-                                            onsubmit="return confirm('Arizani bekor qilmoqchimisiz?')">
+                                            onsubmit="return confirm('{{ __('Arizani bekor qilmoqchimisiz?') }}')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-xs text-red-600 hover:text-red-800 dark:hover:text-red-400">

@@ -24,19 +24,19 @@
                 <form method="GET" action="{{ route('admin.service-requests.index') }}" class="flex flex-wrap gap-3 items-center flex-1">
                     <select name="status"
                         class="px-3.5 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#1a1a19] text-gray-900 dark:text-white focus:ring-accent">
-                        <option value="">{{ __('Barcha holatlar') }}</option>
-                        <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending (Kutilmoqda)</option>
-                        <option value="accepted" {{ request('status') === 'accepted' ? 'selected' : '' }}>Accepted (Qabul qilingan)</option>
-                        <option value="provider_done" {{ request('status') === 'provider_done' ? 'selected' : '' }}>Provider Done (Bajarilgan)</option>
-                        <option value="completed" {{ request('status') === 'completed' ? 'selected' : '' }}>Completed (Yakunlangan)</option>
-                        <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>Cancelled (Bekor qilingan)</option>
+                        <option value="" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100">{{ __('Barcha holatlar') }}</option>
+                        <option value="pending" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100" {{ request('status') === 'pending' ? 'selected' : '' }}>{{ __('Pending') }}</option>
+                        <option value="accepted" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100" {{ request('status') === 'accepted' ? 'selected' : '' }}>{{ __('Accepted') }}</option>
+                        <option value="provider_done" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100" {{ request('status') === 'provider_done' ? 'selected' : '' }}>{{ __('Provider Done') }}</option>
+                        <option value="completed" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100" {{ request('status') === 'completed' ? 'selected' : '' }}>{{ __('Completed') }}</option>
+                        <option value="cancelled" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100" {{ request('status') === 'cancelled' ? 'selected' : '' }}>{{ __('Cancelled') }}</option>
                     </select>
 
                     <select name="category_id"
                         class="px-3.5 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#1a1a19] text-gray-900 dark:text-white focus:ring-accent">
-                        <option value="">{{ __('Barcha kategoriyalar') }}</option>
+                        <option value="" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100">{{ __('Barcha kategoriyalar') }}</option>
                         @foreach ($categories as $cat)
-                            <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>
+                            <option value="{{ $cat->id }}" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100" {{ request('category_id') == $cat->id ? 'selected' : '' }}>
                                 {{ $cat->name }}
                             </option>
                         @endforeach
@@ -109,11 +109,11 @@
                                             @method('PATCH')
                                             <select name="status" onchange="this.form.submit()"
                                                 class="text-xs py-1 px-2 rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-white focus:ring-accent font-medium">
-                                                <option value="pending" {{ $req->status === 'pending' ? 'selected' : '' }}>Pending</option>
-                                                <option value="accepted" {{ $req->status === 'accepted' ? 'selected' : '' }}>Accepted</option>
-                                                <option value="provider_done" {{ $req->status === 'provider_done' ? 'selected' : '' }}>Provider Done</option>
-                                                <option value="completed" {{ $req->status === 'completed' ? 'selected' : '' }}>Completed</option>
-                                                <option value="cancelled" {{ $req->status === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                                <option value="pending" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100" {{ $req->status === 'pending' ? 'selected' : '' }}>{{ __('Pending') }}</option>
+                                                <option value="accepted" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100" {{ $req->status === 'accepted' ? 'selected' : '' }}>{{ __('Accepted') }}</option>
+                                                <option value="provider_done" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100" {{ $req->status === 'provider_done' ? 'selected' : '' }}>{{ __('Provider Done') }}</option>
+                                                <option value="completed" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100" {{ $req->status === 'completed' ? 'selected' : '' }}>{{ __('Completed') }}</option>
+                                                <option value="cancelled" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100" {{ $req->status === 'cancelled' ? 'selected' : '' }}>{{ __('Cancelled') }}</option>
                                             </select>
                                         </form>
                                     </td>

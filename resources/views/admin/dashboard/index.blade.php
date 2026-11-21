@@ -125,7 +125,7 @@
                                         };
                                     @endphp
                                     <span class="inline-block px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider border {{ $statusClasses }}">
-                                        {{ $req->status }}
+                                        {{ __('status_' . $req->status) }}
                                     </span>
                                     <div class="text-[10px] text-gray-400 mt-0.5">
                                         {{ $req->created_at->diffForHumans() }}
@@ -193,7 +193,7 @@
                                 <div class="text-[11px] text-gray-400 truncate max-w-[160px]">{{ $ru->email }}</div>
                             </div>
                             <span class="text-[10px] px-2 py-0.5 rounded font-mono font-medium uppercase border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-neutral-900/60">
-                                {{ $ru->role }}
+                                {{ __($ru->role) }}
                             </span>
                         </div>
                     @endforeach

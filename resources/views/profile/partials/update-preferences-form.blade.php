@@ -17,10 +17,10 @@
         <div>
             <x-input-label for="theme" :value="__('Mavzu (Rejim)')" />
             <select id="theme" name="theme"
-                class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-accent focus:ring-accent text-sm">
-                <option value="system" {{ old('theme', $user->theme) === 'system' ? 'selected' : '' }}>{{ __('Tizim sozlamasi bo\'yicha (Avtomatik)') }}</option>
-                <option value="light" {{ old('theme', $user->theme) === 'light' ? 'selected' : '' }}>{{ __('Yorug\' rejim (Light)') }}</option>
-                <option value="dark" {{ old('theme', $user->theme) === 'dark' ? 'selected' : '' }}>{{ __('Qorong\'i rejim (Dark)') }}</option>
+                class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-300 focus:border-accent focus:ring-accent text-sm">
+                <option value="system" class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100" {{ old('theme', $user->theme) === 'system' ? 'selected' : '' }}>{{ __('Tizim sozlamasi bo\'yicha (Avtomatik)') }}</option>
+                <option value="light" class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100" {{ old('theme', $user->theme) === 'light' ? 'selected' : '' }}>{{ __('Yorug\' rejim (Light)') }}</option>
+                <option value="dark" class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100" {{ old('theme', $user->theme) === 'dark' ? 'selected' : '' }}>{{ __('Qorong\'i rejim (Dark)') }}</option>
             </select>
             <x-input-error class="mt-2" :messages="$errors->get('theme')" />
         </div>
@@ -103,10 +103,10 @@
         <div>
             <x-input-label for="telegram_locale" :value="__('Telegram Bot uchun alohida til (agar sinxronlash o\'chirilgan bo\'lsa)')" />
             <select id="telegram_locale" name="telegram_locale"
-                class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-accent focus:ring-accent text-sm">
-                <option value="uz" {{ old('telegram_locale', $user->telegram_locale ?? 'uz') === 'uz' ? 'selected' : '' }}>{{ __('O\'zbekcha (UZ)') }}</option>
-                <option value="ru" {{ old('telegram_locale', $user->telegram_locale) === 'ru' ? 'selected' : '' }}>{{ __('Русский (RU)') }}</option>
-                <option value="en" {{ old('telegram_locale', $user->telegram_locale) === 'en' ? 'selected' : '' }}>{{ __('English (EN)') }}</option>
+                class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-300 focus:border-accent focus:ring-accent text-sm">
+                <option value="uz" class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100" {{ old('telegram_locale', $user->telegram_locale ?? 'uz') === 'uz' ? 'selected' : '' }}>{{ __('O\'zbekcha (UZ)') }}</option>
+                <option value="ru" class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100" {{ old('telegram_locale', $user->telegram_locale) === 'ru' ? 'selected' : '' }}>{{ __('Русский (RU)') }}</option>
+                <option value="en" class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100" {{ old('telegram_locale', $user->telegram_locale) === 'en' ? 'selected' : '' }}>{{ __('English (EN)') }}</option>
             </select>
             <x-input-error class="mt-2" :messages="$errors->get('telegram_locale')" />
         </div>

@@ -68,7 +68,7 @@
                             @empty
                                 <tr>
                                     <td colspan="5" class="py-8 text-center text-sm text-gray-500">
-                                        Hozircha faol sessiyalar mavjud emas.
+                                        {{ __('Hozircha faol sessiyalar mavjud emas.') }}
                                     </td>
                                 </tr>
                             @endforelse

@@ -34,10 +34,10 @@
 
                     <select name="role"
                         class="px-3.5 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#1a1a19] text-gray-900 dark:text-white focus:ring-accent focus:border-accent">
-                        <option value="">{{ __('Barcha rollar') }}</option>
-                        <option value="client" {{ request('role') === 'client' ? 'selected' : '' }}>Client (Mijoz)</option>
-                        <option value="provider" {{ request('role') === 'provider' ? 'selected' : '' }}>Provider (Usta)</option>
-                        <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Admin</option>
+                        <option value="" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100">{{ __('Barcha rollar') }}</option>
+                        <option value="client" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100" {{ request('role') === 'client' ? 'selected' : '' }}>{{ __('Client (Mijoz)') }}</option>
+                        <option value="provider" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100" {{ request('role') === 'provider' ? 'selected' : '' }}>{{ __('Provider (Usta)') }}</option>
+                        <option value="admin" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100" {{ request('role') === 'admin' ? 'selected' : '' }}>{{ __('Admin') }}</option>
                     </select>
 
                     <button type="submit"
@@ -95,9 +95,9 @@
                                             @method('PATCH')
                                             <select name="role" onchange="this.form.submit()"
                                                 class="text-xs py-1 px-2 rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-white focus:ring-accent">
-                                                <option value="client" {{ $user->role === 'client' ? 'selected' : '' }}>Client</option>
-                                                <option value="provider" {{ $user->role === 'provider' ? 'selected' : '' }}>Provider (Usta)</option>
-                                                <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
+                                                <option value="client" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100" {{ $user->role === 'client' ? 'selected' : '' }}>{{ __('Client (Mijoz)') }}</option>
+                                                <option value="provider" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100" {{ $user->role === 'provider' ? 'selected' : '' }}>{{ __('Provider (Usta)') }}</option>
+                                                <option value="admin" class="bg-white dark:bg-[#1a1a19] text-gray-900 dark:text-gray-100" {{ $user->role === 'admin' ? 'selected' : '' }}>{{ __('Admin') }}</option>
                                             </select>
                                         </form>
                                     </td>
@@ -141,14 +141,14 @@
                                                 </button>
                                             </form>
                                         @else
-                                            <span class="text-xs text-gray-400">(Siz)</span>
+                                            <span class="text-xs text-gray-400">({{ __('Siz') }})</span>
                                         @endif
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
                                     <td colspan="7" class="py-8 text-center text-sm text-gray-500">
-                                        Hech qanday foydalanuvchi topilmadi.
+                                        {{ __('Hech qanday foydalanuvchi topilmadi.') }}
                                     </td>
                                 </tr>
                             @endforelse

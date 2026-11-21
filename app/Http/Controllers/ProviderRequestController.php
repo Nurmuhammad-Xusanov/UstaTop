@@ -21,13 +21,13 @@ class ProviderRequestController extends Controller
 
         if (! $user->telegram_id) {
             return back()->withErrors([
-                'telegram' => 'Avval Telegramni ulang',
+                'telegram' => __('Avval Telegramni ulang'),
             ]);
         }
 
         if ($user->role === 'provider') {
             return back()->withErrors([
-                'role' => 'Siz allaqachon provaydersiz',
+                'role' => __('Siz allaqachon ustalarsiz'),
             ]);
         }
 
@@ -37,14 +37,14 @@ class ProviderRequestController extends Controller
         ) {
 
             return back()->withErrors([
-                'request' => 'So‘rovingiz ko‘rib chiqilmoqda',
+                'request' => __('So‘rovingiz ko‘rib chiqilmoqda'),
             ]);
         }
 
         $request->validate([
             'phone' => 'required|string|max:13',
             'city' => 'required|string|max:100',
-            'service_ids' => 'required|array',
+            'service_ids' => 'required|array|min:1',
         ]);
 
         ProviderRequest::create([
@@ -55,7 +55,7 @@ class ProviderRequestController extends Controller
             'status' => 'pending',
         ]);
 
-        return back()->with('success', 'So‘rov yuborildi');
+        return back()->with('success', __('So‘rov yuborildi'));
     }
 
     
@@ -107,13 +107,13 @@ class ProviderRequestController extends Controller
              $providerRequest->user->categories()->sync($providerRequest->service_ids);
         }
 
-        return back()->with('success', 'Updated');
+        return back()->with('success', __('Arizangiz yangilandi'));
     }
 
     public function destroy(ProviderRequest $providerRequest)
     {
             $providerRequest->delete();
-            return redirect()->route('provider-requests.index')->with('success', 'Deleted');
+            return redirect()->route('provider-requests.index')->with('success', __('Arizangiz o\'chirildi'));
     }
 
 

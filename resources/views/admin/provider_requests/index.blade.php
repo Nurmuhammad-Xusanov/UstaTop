@@ -51,7 +51,7 @@
                                         };
                                     @endphp
                                     <span class="inline-block px-2.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider border {{ $statusClass }}">
-                                        {{ $r->status }}
+                                        {{ __('status_' . $r->status) }}
                                     </span>
                                 </td>
                                 <td class="py-3 px-4 text-right">

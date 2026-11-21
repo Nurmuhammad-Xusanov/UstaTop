@@ -52,9 +52,9 @@
                     <x-input-label for="category_id" :value="__('Xizmat sohasi')" class="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1" />
                     <select id="category_id" name="category_id" required
                         class="w-full text-sm rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#161615] px-3.5 py-2.5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent">
-                        <option value="">{{ __('Sohani tanlang') }}</option>
+                        <option value="" class="bg-white dark:bg-[#161615] text-gray-900 dark:text-gray-100">{{ __('Sohani tanlang') }}</option>
                         @foreach ($categories as $category)
-                            <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                            <option value="{{ $category->id }}" class="bg-white dark:bg-[#161615] text-gray-900 dark:text-gray-100" {{ old('category_id') == $category->id ? 'selected' : '' }}>
                                 {{ $category->name }}
                             </option>
                         @endforeach
@@ -80,7 +80,7 @@
                 {{-- City --}}
                 <div>
                     <x-input-label for="city" :value="__('Shahar yoki tuman')" class="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1" />
-                    <input id="city" type="text" name="city" value="{{ old('city') }}" placeholder="Toshkent shahri" required
+                    <input id="city" type="text" name="city" value="{{ old('city') }}" placeholder="{{ __('Toshkent shahri') }}" required
                         class="w-full text-sm rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#161615] px-3.5 py-2.5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent">
                     <x-input-error :messages="$errors->get('city')" class="mt-1" />
                 </div>
