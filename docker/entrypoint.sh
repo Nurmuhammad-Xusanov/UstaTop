@@ -40,6 +40,10 @@ SESSION_DRIVER="${SESSION_DRIVER:-database}"
 SESSION_LIFETIME="${SESSION_LIFETIME:-120}"
 QUEUE_CONNECTION="${QUEUE_CONNECTION:-sync}"
 
+MAIL_MAILER="${MAIL_MAILER:-log}"
+MAIL_FROM_ADDRESS="${MAIL_FROM_ADDRESS:-no-reply@ustatop.uz}"
+MAIL_FROM_NAME="${MAIL_FROM_NAME:-UstaTop}"
+
 TELEGRAM_BOT_TOKEN="${TELEGRAM_BOT_TOKEN}"
 TELEGRAM_BOT_USERNAME="${TELEGRAM_BOT_USERNAME:-ustatpuzbot}"
 EOF
@@ -56,10 +60,12 @@ php artisan config:cache || true
 php artisan route:cache || true
 php artisan view:cache || true
 
-# Run database migrations
+# Run database migrations and seed initial data
 if [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
     echo "Running database migrations..."
     php artisan migrate --force || true
+    echo "Seeding initial live data..."
+    php artisan db:seed --force || true
 fi
 
 echo "Starting Nginx (port ${PORT}) and PHP-FPM via Supervisord..."

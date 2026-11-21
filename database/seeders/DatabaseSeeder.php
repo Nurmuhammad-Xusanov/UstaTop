@@ -2,24 +2,266 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
+use App\Models\ProviderRequest;
+use App\Models\ServiceRequests;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // 1. Create or update primary Admin User (nursherzil@gmail.com)
+        $admin = User::updateOrCreate(
+            ['email' => 'nursherzil@gmail.com'],
+            [
+                'name' => 'Nurmuhammad (Admin)',
+                'password' => Hash::make('password123'),
+                'role' => 'admin',
+                'email_verified_at' => now(),
+                'theme' => 'system',
+            ]
+        );
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // 2. Initial 9 Categories
+        $categoriesData = [
+            'Santexnika va suv quvurlari',
+            'Elektr montaj va nosozliklar',
+            'Mebel yasash va ta\'mirlash',
+            'Maishiy texnika ta\'mirlash',
+            'Konditsioner va ventilyatsiya',
+            'Ichki pardozlash va kafel',
+            'Duradgorlik va eshik-rom',
+            'Tozalash va professional klining',
+            'Payvandlash va metall ishlari',
+        ];
+
+        $categories = [];
+        foreach ($categoriesData as $catName) {
+            $categories[] = Category::firstOrCreate(['name' => $catName]);
+        }
+
+        // 3. Initial 9 Masters (Providers)
+        $mastersData = [
+            [
+                'name' => 'Jasur Qodirov',
+                'email' => 'jasur.qodirov@ustatop.uz',
+                'city' => 'Toshkent',
+                'phone' => '+998901112233',
+                'cat_index' => 0, // Santexnika
+            ],
+            [
+                'name' => 'Alisher Karimov',
+                'email' => 'alisher.karimov@ustatop.uz',
+                'city' => 'Samarqand',
+                'phone' => '+998912223344',
+                'cat_index' => 1, // Elektr
+            ],
+            [
+                'name' => 'Bobur Mirzayev',
+                'email' => 'bobur.mebel@ustatop.uz',
+                'city' => 'Toshkent',
+                'phone' => '+998933334455',
+                'cat_index' => 2, // Mebel
+            ],
+            [
+                'name' => 'Rustam Bekmurodov',
+                'email' => 'rustam.servis@ustatop.uz',
+                'city' => 'Farg\'ona',
+                'phone' => '+998944445566',
+                'cat_index' => 3, // Maishiy texnika
+            ],
+            [
+                'name' => 'Dilshod Xalilov',
+                'email' => 'dilshod.kondi@ustatop.uz',
+                'city' => 'Toshkent',
+                'phone' => '+998955556677',
+                'cat_index' => 4, // Konditsioner
+            ],
+            [
+                'name' => 'Farrux Usmonov',
+                'email' => 'farrux.remont@ustatop.uz',
+                'city' => 'Buxoro',
+                'phone' => '+998976667788',
+                'cat_index' => 5, // Pardozlash
+            ],
+            [
+                'name' => 'Sarvar To\'rayev',
+                'email' => 'sarvar.duradgor@ustatop.uz',
+                'city' => 'Andijon',
+                'phone' => '+998987778899',
+                'cat_index' => 6, // Duradgorlik
+            ],
+            [
+                'name' => 'Nodir Zokirov',
+                'email' => 'nodir.clean@ustatop.uz',
+                'city' => 'Toshkent',
+                'phone' => '+998998889900',
+                'cat_index' => 7, // Klining
+            ],
+            [
+                'name' => 'Sherzod Rahimov',
+                'email' => 'sherzod.svarka@ustatop.uz',
+                'city' => 'Namangan',
+                'phone' => '+998909990011',
+                'cat_index' => 8, // Payvandlash
+            ],
+        ];
+
+        $providers = [];
+        foreach ($mastersData as $m) {
+            $cat = $categories[$m['cat_index']];
+            $user = User::updateOrCreate(
+                ['email' => $m['email']],
+                [
+                    'name' => $m['name'],
+                    'password' => Hash::make('password123'),
+                    'role' => 'provider',
+                    'email_verified_at' => now(),
+                    'theme' => 'system',
+                ]
+            );
+
+            $user->categories()->syncWithoutDetaching([$cat->id]);
+
+            ProviderRequest::firstOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'phone' => $m['phone'],
+                    'city' => $m['city'],
+                    'service_ids' => [$cat->id],
+                    'status' => 'approved',
+                ]
+            );
+
+            $providers[] = $user;
+        }
+
+        // 4. Create Demo Clients
+        $clientsData = [
+            ['name' => 'Olimjon Vohidov', 'email' => 'olim.vohidov@gmail.com', 'city' => 'Toshkent', 'phone' => '+998901234567'],
+            ['name' => 'Malika Rahimova', 'email' => 'malika.rahimova@mail.ru', 'city' => 'Samarqand', 'phone' => '+998912345678'],
+            ['name' => 'Sardorbek Jo\'rayev', 'email' => 'sardor.jurayev@gmail.com', 'city' => 'Farg\'ona', 'phone' => '+998933456789'],
+            ['name' => 'Zuhra Karimova', 'email' => 'zuhra.karimova@gmail.com', 'city' => 'Toshkent', 'phone' => '+998944567890'],
+        ];
+
+        $clients = [];
+        foreach ($clientsData as $c) {
+            $client = User::updateOrCreate(
+                ['email' => $c['email']],
+                [
+                    'name' => $c['name'],
+                    'password' => Hash::make('password123'),
+                    'role' => 'client',
+                    'email_verified_at' => now(),
+                    'theme' => 'system',
+                ]
+            );
+            $clients[] = array_merge($c, ['user' => $client]);
+        }
+
+        // 5. Initial 9 Realistic Service Requests
+        $requestsData = [
+            // Completed requests
+            [
+                'client_idx' => 0,
+                'cat_idx' => 0,
+                'provider_idx' => 0,
+                'city' => 'Toshkent, Yunusobod',
+                'phone' => '+998901234567',
+                'status' => 'completed',
+            ],
+            [
+                'client_idx' => 1,
+                'cat_idx' => 1,
+                'provider_idx' => 1,
+                'city' => 'Samarqand, Registon',
+                'phone' => '+998912345678',
+                'status' => 'completed',
+            ],
+            [
+                'client_idx' => 2,
+                'cat_idx' => 3,
+                'provider_idx' => 3,
+                'city' => 'Farg\'ona, Markaz',
+                'phone' => '+998933456789',
+                'status' => 'completed',
+            ],
+            // In-Progress / Accepted requests
+            [
+                'client_idx' => 3,
+                'cat_idx' => 4,
+                'provider_idx' => 4,
+                'city' => 'Toshkent, Chilonzor',
+                'phone' => '+998944567890',
+                'status' => 'accepted',
+            ],
+            [
+                'client_idx' => 0,
+                'cat_idx' => 2,
+                'provider_idx' => 2,
+                'city' => 'Toshkent, Mirzo Ulug\'bek',
+                'phone' => '+998901234567',
+                'status' => 'provider_done',
+            ],
+            [
+                'client_idx' => 1,
+                'cat_idx' => 5,
+                'provider_idx' => 5,
+                'city' => 'Buxoro, Eski shahar',
+                'phone' => '+998912345678',
+                'status' => 'accepted',
+            ],
+            // Pending requests (awaiting master)
+            [
+                'client_idx' => 2,
+                'cat_idx' => 7,
+                'provider_idx' => null,
+                'city' => 'Toshkent, Sergeli',
+                'phone' => '+998933456789',
+                'status' => 'pending',
+            ],
+            [
+                'client_idx' => 3,
+                'cat_idx' => 8,
+                'provider_idx' => null,
+                'city' => 'Namangan, Davlatobod',
+                'phone' => '+998944567890',
+                'status' => 'pending',
+            ],
+            [
+                'client_idx' => 0,
+                'cat_idx' => 6,
+                'provider_idx' => null,
+                'city' => 'Andijon, Bobur shoh',
+                'phone' => '+998901234567',
+                'status' => 'pending',
+            ],
+        ];
+
+        foreach ($requestsData as $req) {
+            $client = $clients[$req['client_idx']]['user'];
+            $cat = $categories[$req['cat_idx']];
+            $provider = isset($req['provider_idx']) && $req['provider_idx'] !== null ? $providers[$req['provider_idx']] : null;
+
+            ServiceRequests::firstOrCreate(
+                [
+                    'user_id' => $client->id,
+                    'category_id' => $cat->id,
+                    'city' => $req['city'],
+                ],
+                [
+                    'provider_id' => $provider ? $provider->id : null,
+                    'phone' => $req['phone'],
+                    'email' => $client->email,
+                    'status' => $req['status'],
+                ]
+            );
+        }
     }
 }
