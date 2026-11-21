@@ -24,21 +24,22 @@
                         {{ __('Usta bo\'lish') }}
                     </x-nav-link>
                     @if (auth()->user()->role === 'admin')
-                        <x-nav-link :href="route('admin.categories.index')"
-                            :active="request()->routeIs('admin.categories.*')">
-                            {{ __('Kategoriyalar') }}
-
+                        <x-nav-link :href="route('admin.dashboard')"
+                            :active="request()->routeIs('admin.*')">
+                            👑 {{ __('Admin Panel') }}
                         </x-nav-link>
                     @endif
                 </div>
             </div>
 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6 gap-2">
+            <!-- Settings Dropdown & Language Switcher -->
+            <div class="hidden sm:flex sm:items-center sm:ms-6 gap-3">
+                <x-language-switcher />
+
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button
-                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400  hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
                             <div>{{ Auth::user()->name }}</div>
 
                             <div class="ms-1">
@@ -70,18 +71,16 @@
                 </x-dropdown>
 
                 {{-- theme-toggle --}}
-                <button onclick="toggleTheme()" id="theme-toggle" type="button">
+                <button onclick="toggleTheme()" id="theme-toggle" type="button" class="p-1">
                     <div class="dark:bg-white bg-black duration-200 rounded-full w-5 h-5"></div>
                 </button>
             </div>
 
-
-
-
-            <div class="flex gap-2 sm:hidden">
+            <div class="flex items-center gap-2 sm:hidden">
+                <x-language-switcher />
 
                 {{-- theme-toggle --}}
-                <button onclick="toggleTheme()" id="theme-toggle" type="button">
+                <button onclick="toggleTheme()" id="theme-toggle" type="button" class="p-1">
                     <div class="dark:bg-white bg-black duration-200 rounded-full w-5 h-5"></div>
                 </button>
                 <!-- Hamburger -->
@@ -117,9 +116,9 @@
                 {{ __('Usta bo\'lish') }}
             </x-responsive-nav-link>
             @if (auth()->user()->role === 'admin')
-                <x-responsive-nav-link :href="route('admin.categories.index')"
-                    :active="request()->routeIs('admin.categories.*')">
-                    {{ __('Kategoriyalar') }}
+                <x-responsive-nav-link :href="route('admin.dashboard')"
+                    :active="request()->routeIs('admin.*')">
+                    👑 {{ __('Admin Panel') }}
                 </x-responsive-nav-link>
             @endif
         </div>
