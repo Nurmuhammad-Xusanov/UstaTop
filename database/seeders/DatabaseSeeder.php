@@ -187,6 +187,49 @@ class DatabaseSeeder extends Seeder
             $providers[] = $user;
         }
 
+        // 3.1. Create Pending Master Applications (for Admin review demonstration)
+        $pendingApplicants = [
+            [
+                'name' => 'Bobur Mirzayev',
+                'email' => 'bobur.mirzayev@gmail.com',
+                'phone' => '+998901112233',
+                'city' => 'Toshkent',
+                'cat_indices' => [0, 1], // Santexnika, Elektr montaj
+            ],
+            [
+                'name' => 'Sanjar Qodirov',
+                'email' => 'sanjar.qodirov@gmail.com',
+                'phone' => '+998935554433',
+                'city' => 'Samarqand',
+                'cat_indices' => [4], // Konditsioner
+            ],
+        ];
+
+        foreach ($pendingApplicants as $app) {
+            $appUser = User::updateOrCreate(
+                ['email' => $app['email']],
+                [
+                    'name' => $app['name'],
+                    'password' => Hash::make('password123'),
+                    'role' => 'client',
+                    'email_verified_at' => now(),
+                    'theme' => 'system',
+                ]
+            );
+
+            $serviceIds = array_map(fn($idx) => $categories[$idx]->id, $app['cat_indices']);
+
+            ProviderRequest::updateOrCreate(
+                ['user_id' => $appUser->id],
+                [
+                    'phone' => $app['phone'],
+                    'city' => $app['city'],
+                    'service_ids' => $serviceIds,
+                    'status' => 'pending',
+                ]
+            );
+        }
+
         // 4. Create Demo Clients
         $clientsData = [
             ['name' => 'Olimjon Vohidov', 'email' => 'olim.vohidov@gmail.com', 'city' => 'Toshkent', 'phone' => '+998901234567'],

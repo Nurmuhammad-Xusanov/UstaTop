@@ -33,7 +33,7 @@
                     class="mt-1 rounded border-gray-300 dark:border-gray-700 text-accent focus:ring-accent">
                 <div>
                     <span class="text-sm font-medium text-gray-900 dark:text-white">
-                        🔄 {{ __('Mavzuni barcha qurilmalarda avtomatik sinxronlash') }}
+                        {{ __('Mavzuni barcha qurilmalarda avtomatik sinxronlash') }}
                     </span>
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                         {{ __('Kompyuterda qora rejim yoqsangiz, telefon yoki planshetingizda ham avtomatik qora rejim ochiladi (va aksincha).') }}
@@ -50,7 +50,7 @@
                     class="mt-1 rounded border-gray-300 dark:border-gray-700 text-accent focus:ring-accent">
                 <div>
                     <span class="text-sm font-medium text-gray-900 dark:text-white">
-                        🔄 {{ __('Sayt tilini Telegram bot bilan avtomatik sinxronlash') }}
+                        {{ __('Sayt tilini Telegram bot bilan avtomatik sinxronlash') }}
                     </span>
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                         {{ __('Saytda tilni (O\'zbek, Rus, Ingliz) o\'zgartirganingizda, Telegram bot (@ustatpuzbot) ham sizga darhol o\'sha tilda xabar yuborishni boshlaydi.') }}
@@ -64,9 +64,9 @@
             <x-input-label for="telegram_locale" :value="__('Telegram Bot uchun alohida til (agar sinxronlash o\'chirilgan bo\'lsa)')" />
             <select id="telegram_locale" name="telegram_locale"
                 class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-accent focus:ring-accent text-sm">
-                <option value="uz" {{ old('telegram_locale', $user->telegram_locale ?? 'uz') === 'uz' ? 'selected' : '' }}>O'zbekcha (UZ)</option>
-                <option value="ru" {{ old('telegram_locale', $user->telegram_locale) === 'ru' ? 'selected' : '' }}>Русский (RU)</option>
-                <option value="en" {{ old('telegram_locale', $user->telegram_locale) === 'en' ? 'selected' : '' }}>English (EN)</option>
+                <option value="uz" {{ old('telegram_locale', $user->telegram_locale ?? 'uz') === 'uz' ? 'selected' : '' }}>{{ __('O\'zbekcha (UZ)') }}</option>
+                <option value="ru" {{ old('telegram_locale', $user->telegram_locale) === 'ru' ? 'selected' : '' }}>{{ __('Русский (RU)') }}</option>
+                <option value="en" {{ old('telegram_locale', $user->telegram_locale) === 'en' ? 'selected' : '' }}>{{ __('English (EN)') }}</option>
             </select>
             <x-input-error class="mt-2" :messages="$errors->get('telegram_locale')" />
         </div>
