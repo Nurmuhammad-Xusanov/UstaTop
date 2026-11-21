@@ -43,6 +43,10 @@ services:
         value: database
       - key: QUEUE_CONNECTION
         value: sync
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_BOT_USERNAME
+        sync: false
 
 databases:
   - name: ustatop-db

@@ -17,7 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => IsAdmin::class,
             'provider' => IsProvider::class
         ]);
-       
+        $middleware->validateCsrfTokens(except: [
+            'api/telegram/webhook',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

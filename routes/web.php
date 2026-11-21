@@ -6,6 +6,9 @@ use App\Http\Controllers\ProviderRequestController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ServiceRequestController;
+use App\Http\Controllers\TelegramWebhookController;
+
+Route::post('/api/telegram/webhook', [TelegramWebhookController::class, 'handle'])->name('telegram.webhook');
 
 Route::get('/', function () {
     return view('welcome');

@@ -52,7 +52,7 @@
                         {{-- <a href="https://t.me/ustatpuzbot?start={{ auth()->id() }}" target="_blank">
                             Telegram’ni ulash
                         </a> --}}
-                        <a href="https://t.me/testvidosbludbot?start={{ auth()->id() }}" target="_blank">
+                        <a href="https://t.me/{{ config('services.telegram.bot_username', 'testvidosbludbot') }}?start={{ auth()->id() }}" target="_blank" class="inline-flex items-center text-blue-600 hover:underline">
                             Telegram’ni ulash
                         </a>
                     @endif
