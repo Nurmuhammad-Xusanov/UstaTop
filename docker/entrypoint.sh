@@ -12,6 +12,15 @@ if [ -z "$APP_KEY" ] || ! echo "$APP_KEY" | grep -q "^base64:"; then
     export APP_KEY
 fi
 
+# Normalize APP_URL to https
+if [ -n "$APP_URL" ] && [ "$APP_URL" != "http://localhost" ]; then
+    APP_URL=$(echo "$APP_URL" | sed 's|^http://|https://|')
+    case "$APP_URL" in
+        https://*) ;;
+        *) APP_URL="https://${APP_URL}" ;;
+    esac
+fi
+
 # Write runtime environment variables to /var/www/html/.env
 cat <<EOF > /var/www/html/.env
 APP_NAME="${APP_NAME:-UstaTop}"
