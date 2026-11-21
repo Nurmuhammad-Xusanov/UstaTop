@@ -8,7 +8,7 @@
                 <a href="{{ route('admin.dashboard') }}" class="text-xs text-gray-500 hover:text-black dark:hover:text-white transition">
                     &larr; {{ __('Dashboardga qaytish') }}
                 </a>
-                <a href="{{ route('admin.categories.create') }}" class="inline-flex items-center px-3.5 py-1.5 text-xs font-semibold rounded-md border border-black bg-black text-white dark:bg-white dark:text-black dark:border-white hover:opacity-90 transition">
+                <a href="{{ route('admin.categories.create') }}" class="inline-flex items-center px-3.5 py-1.5 text-xs font-semibold rounded-lg border border-accent/40 bg-accent/10 text-accent hover:bg-accent hover:text-white dark:hover:text-black hover:shadow-[0_0_15px_rgba(14,165,233,0.35)] transition">
                     {{ __('Yangi kategoriya qo\'shish') }}
                 </a>
             </div>

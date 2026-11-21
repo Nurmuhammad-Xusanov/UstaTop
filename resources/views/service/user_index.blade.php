@@ -1,38 +1,73 @@
 <x-app-layout>
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @foreach ($requests as $request)
-                <div class="mb-6 p-6 bg-white dark:bg-[#0a0a0a]  rounded-lg shadow">
-                    <h3 class="text-lg font-medium text-gray-600">
-                        {{ $request->user->name ?? 'Unknown' }}
-                    </h3>
-                    <p class="text-gray-600">City: {{ $request->city }}</p>
-                    <p class="text-gray-600">Phone: {{ $request->phone }}</p>
-                    <p class="text-gray-600">Status: {{ $request->status }}</p>
-                    @if ($request->status === 'provider_done' && $request->user_id === auth()->id())
-                        <form method="POST" action="{{ route('client.service-requests.confirm', $request) }}">
+    <x-slot name="header">
+        <div class="flex items-center justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                {{ __('Mening buyurtmalarim') }}
+            </h2>
+            <a href="{{ route('service-requests.create') }}"
+                class="inline-flex items-center px-3.5 py-1.5 text-xs font-semibold rounded-md border border-accent/40 bg-accent/10 text-accent hover:bg-accent hover:text-white dark:hover:text-black hover:shadow-[0_0_15px_rgba(14,165,233,0.3)] transition duration-200">
+                + {{ __('Yangi so\'rov') }}
+            </a>
+        </div>
+    </x-slot>
+
+    <div class="py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+            @forelse ($requests as $request)
+                <div class="p-6 bg-white dark:bg-[#161615] border border-gray-100 dark:border-gray-800 rounded-xl shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-3">
+                            <h3 class="text-base font-semibold text-gray-900 dark:text-white">
+                                {{ $request->category->name ?? __('Xizmat') }}
+                            </h3>
+                            @php
+                                $statusClasses = match($request->status) {
+                                    'completed' => 'text-emerald-700 bg-emerald-50 border-emerald-200 dark:text-emerald-300 dark:bg-emerald-950/40 dark:border-emerald-800',
+                                    'accepted' => 'text-sky-700 bg-sky-50 border-sky-200 dark:text-sky-300 dark:bg-sky-950/40 dark:border-sky-800',
+                                    'provider_done' => 'text-indigo-700 bg-indigo-50 border-indigo-200 dark:text-indigo-300 dark:bg-indigo-950/40 dark:border-indigo-800',
+                                    'pending' => 'text-amber-700 bg-amber-50 border-amber-200 dark:text-amber-300 dark:bg-amber-950/40 dark:border-amber-800',
+                                    'cancelled' => 'text-rose-700 bg-rose-50 border-rose-200 dark:text-rose-300 dark:bg-rose-950/40 dark:border-rose-800',
+                                    default => 'text-gray-700 bg-gray-50 border-gray-200 dark:text-gray-300 dark:bg-neutral-900 dark:border-neutral-800',
+                                };
+                            @endphp
+                            <span class="inline-block px-2.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider border {{ $statusClasses }}">
+                                {{ $request->status }}
+                            </span>
+                        </div>
+                        <div class="mt-2 text-xs text-gray-500 dark:text-gray-400 space-y-1">
+                            <div><span class="text-gray-400">{{ __('Shahar') }}:</span> {{ $request->city }}</div>
+                            <div><span class="text-gray-400">{{ __('Telefon') }}:</span> {{ $request->phone }}</div>
+                            @if ($request->provider)
+                                <div><span class="text-gray-400">{{ __('Usta') }}:</span> {{ $request->provider->name }} ({{ $request->provider->email }})</div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        @if ($request->status === 'provider_done' && $request->user_id === auth()->id())
+                            <form method="POST" action="{{ route('client.service-requests.confirm', $request) }}">
+                                @csrf
+                                <button class="px-3 py-1.5 text-xs font-semibold rounded-md border border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition duration-200">
+                                    {{ __('Ish tugadi (Tasdiqlash)') }}
+                                </button>
+                            </form>
+                        @endif
+
+                        <form method="POST" action="{{ route('service-requests.destroy', $request) }}"
+                            onsubmit="return confirm('{{ __('Ishonchingiz komilmi?') }}')">
                             @csrf
-                            <button class="mt-2 border p-1.5 rounded-sm hover:border-info hover:text-info dark:hover:text-info transition duration-200 text-dark dark:text-white">
-                                Ish tugadi
+                            @method('DELETE')
+                            <button type="submit" class="px-3 py-1.5 text-xs font-medium rounded-md border border-gray-200 dark:border-gray-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition duration-200">
+                                {{ __('O\'chirish') }}
                             </button>
                         </form>
-                    @endif
-
-                    <form method="POST" action="{{ route('service-requests.destroy', $request) }}"
-                        onsubmit="return confirm('Ishonching komilmi?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="mt-2 border p-1.5 rounded-sm hover:border-warning hover:text-warning dark:hover:text-warning transition duration-200 text-dark dark:text-white">
-                            O'chirish
-                        </button>
-                    </form>
+                    </div>
                 </div>
-            @endforeach
-        </div>
-        <div class="fixed bottom-5 right-5 text-white">
-            <a href="{{ route('service-requests.create') }}"
-                class="text-black dark:text-white border border-transparent hover:text-accent dark:hover:text-accent hover:border-accent-hover dark:hover:border-accent-hover rounded-sm transition duration-200 leading-normal p-1.5">Yangi
-                so‘rov</a>
+            @empty
+                <div class="p-10 text-center bg-white dark:bg-[#161615] border border-gray-100 dark:border-gray-800 rounded-xl">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Hech qanday buyurtma topilmadi.') }}</p>
+                </div>
+            @endforelse
         </div>
     </div>
 </x-app-layout>

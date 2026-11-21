@@ -6,7 +6,7 @@
             </h2>
             @if (!$hasPending && auth()->user()->role !== 'provider')
                 <a href="{{ route('provider-requests.create') }}"
-                    class="px-3.5 py-1.5 text-xs font-semibold rounded bg-black text-white dark:bg-white dark:text-black hover:opacity-85 transition">
+                    class="px-3.5 py-1.5 text-xs font-semibold rounded-lg border border-accent/40 bg-accent/10 text-accent hover:bg-accent hover:text-white dark:hover:text-black hover:shadow-[0_0_15px_rgba(14,165,233,0.35)] transition">
                     {{ __('Yangi ariza topshirish') }}
                 </a>
             @endif
@@ -56,7 +56,14 @@
                                     {{ $request->phone }}
                                 </td>
                                 <td class="py-3 px-4">
-                                    <span class="inline-block px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider border border-gray-200 dark:border-gray-800 {{ $request->status === 'approved' ? 'text-green-600 dark:text-green-400' : ($request->status === 'rejected' ? 'text-red-600 dark:text-red-400' : 'text-amber-600 dark:text-amber-400') }}">
+                                    @php
+                                        $badgeClasses = match($request->status) {
+                                            'approved' => 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400',
+                                            'rejected' => 'bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400',
+                                            default => 'bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400',
+                                        };
+                                    @endphp
+                                    <span class="inline-block px-2.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider border {{ $badgeClasses }}">
                                         {{ $request->status }}
                                     </span>
                                 </td>

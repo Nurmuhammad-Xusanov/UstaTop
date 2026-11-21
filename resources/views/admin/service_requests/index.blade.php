@@ -43,7 +43,7 @@
                     </select>
 
                     <button type="submit"
-                        class="px-4 py-2 text-sm font-semibold rounded-lg bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition">
+                        class="px-4 py-2 text-sm font-semibold rounded-lg border border-accent/40 bg-accent/10 text-accent hover:bg-accent hover:text-white dark:hover:text-black hover:shadow-[0_0_15px_rgba(14,165,233,0.35)] transition cursor-pointer">
                         {{ __('Filtrlash') }}
                     </button>
 

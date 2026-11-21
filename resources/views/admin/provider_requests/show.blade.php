@@ -27,7 +27,14 @@
                         {{ $providerRequest->user->email ?? 'No email' }}
                     </p>
                 </div>
-                <span class="px-2.5 py-1 text-xs font-mono uppercase tracking-wider rounded border border-gray-200 dark:border-gray-800 {{ $providerRequest->status === 'approved' ? 'text-green-600 dark:text-green-400' : ($providerRequest->status === 'rejected' ? 'text-red-600 dark:text-red-400' : 'text-amber-600 dark:text-amber-400') }}">
+                @php
+                    $reqBadgeClass = match($providerRequest->status) {
+                        'approved' => 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400',
+                        'rejected' => 'bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400',
+                        default => 'bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400',
+                    };
+                @endphp
+                <span class="px-3 py-1 text-xs font-semibold uppercase tracking-wider rounded-lg border {{ $reqBadgeClass }}">
                     {{ $providerRequest->status }}
                 </span>
             </div>
@@ -72,7 +79,7 @@
                             @method('PATCH')
                             <input type="hidden" name="status" value="approved">
                             <button type="submit"
-                                class="px-4 py-2 text-xs font-semibold rounded bg-black text-white dark:bg-white dark:text-black hover:opacity-85 transition">
+                                class="px-4 py-2 text-xs font-semibold rounded-lg border border-accent/40 bg-accent/10 text-accent hover:bg-accent hover:text-white dark:hover:text-black hover:shadow-[0_0_15px_rgba(14,165,233,0.35)] transition cursor-pointer">
                                 {{ __('approve_btn') }}
                             </button>
                         </form>
@@ -84,7 +91,7 @@
                             @method('PATCH')
                             <input type="hidden" name="status" value="rejected">
                             <button type="submit"
-                                class="px-4 py-2 text-xs font-semibold rounded border border-gray-300 dark:border-gray-700 hover:border-black dark:hover:border-white transition">
+                                class="px-4 py-2 text-xs font-semibold rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition cursor-pointer">
                                 {{ __('reject_btn') }}
                             </button>
                         </form>

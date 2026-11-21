@@ -43,13 +43,20 @@
                                     {{ $r->phone }}
                                 </td>
                                 <td class="py-3 px-4">
-                                    <span class="inline-block px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider border border-gray-200 dark:border-gray-800 {{ $r->status === 'approved' ? 'text-green-600 dark:text-green-400' : ($r->status === 'rejected' ? 'text-red-600 dark:text-red-400' : 'text-amber-600 dark:text-amber-400') }}">
+                                    @php
+                                        $statusClass = match($r->status) {
+                                            'approved' => 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400',
+                                            'rejected' => 'bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400',
+                                            default => 'bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400',
+                                        };
+                                    @endphp
+                                    <span class="inline-block px-2.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider border {{ $statusClass }}">
                                         {{ $r->status }}
                                     </span>
                                 </td>
                                 <td class="py-3 px-4 text-right">
                                     <a href="{{ route('admin.provider-requests.show', $r) }}"
-                                        class="px-2.5 py-1 text-xs rounded border border-gray-200 dark:border-gray-800 hover:border-black dark:hover:border-white transition">
+                                        class="px-2.5 py-1 text-xs rounded-lg border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:border-accent hover:text-accent transition">
                                         {{ __('details_btn') }}
                                     </a>
                                 </td>

@@ -97,7 +97,7 @@
                         <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
                             {{ __('recent_orders') }}
                         </h3>
-                        <a href="{{ route('admin.service-requests.index') }}" class="text-xs text-gray-500 hover:text-black dark:hover:text-white transition">
+                        <a href="{{ route('admin.service-requests.index') }}" class="text-xs text-gray-500 hover:text-accent dark:hover:text-accent transition duration-200">
                             {{ __('view_all') }} &rarr;
                         </a>
                     </div>
@@ -114,7 +114,17 @@
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <span class="inline-block px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider border border-gray-200 dark:border-gray-800">
+                                    @php
+                                        $statusClasses = match($req->status) {
+                                            'completed' => 'text-emerald-700 bg-emerald-50 border-emerald-200 dark:text-emerald-300 dark:bg-emerald-950/40 dark:border-emerald-800',
+                                            'accepted' => 'text-sky-700 bg-sky-50 border-sky-200 dark:text-sky-300 dark:bg-sky-950/40 dark:border-sky-800',
+                                            'provider_done' => 'text-indigo-700 bg-indigo-50 border-indigo-200 dark:text-indigo-300 dark:bg-indigo-950/40 dark:border-indigo-800',
+                                            'pending' => 'text-amber-700 bg-amber-50 border-amber-200 dark:text-amber-300 dark:bg-amber-950/40 dark:border-amber-800',
+                                            'cancelled' => 'text-rose-700 bg-rose-50 border-rose-200 dark:text-rose-300 dark:bg-rose-950/40 dark:border-rose-800',
+                                            default => 'text-gray-700 bg-gray-50 border-gray-200 dark:text-gray-300 dark:bg-neutral-900 dark:border-neutral-800',
+                                        };
+                                    @endphp
+                                    <span class="inline-block px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider border {{ $statusClasses }}">
                                         {{ $req->status }}
                                     </span>
                                     <div class="text-[10px] text-gray-400 mt-0.5">
@@ -182,7 +192,7 @@
                                 <div class="font-medium text-gray-900 dark:text-white">{{ $ru->name }}</div>
                                 <div class="text-[11px] text-gray-400 truncate max-w-[160px]">{{ $ru->email }}</div>
                             </div>
-                            <span class="text-[10px] px-1.5 py-0.5 rounded font-mono uppercase border border-gray-200 dark:border-gray-800">
+                            <span class="text-[10px] px-2 py-0.5 rounded font-mono font-medium uppercase border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-neutral-900/60">
                                 {{ $ru->role }}
                             </span>
                         </div>
