@@ -21,6 +21,10 @@ class SetLocaleMiddleware
     {
         $locale = Session::get('locale');
 
+        if (!$locale && auth()->check() && auth()->user()->locale && in_array(auth()->user()->locale, $this->supportedLocales)) {
+            $locale = auth()->user()->locale;
+        }
+
         if (!$locale || !in_array($locale, $this->supportedLocales)) {
             $locale = $request->cookie('locale');
         }

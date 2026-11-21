@@ -29,6 +29,11 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
 
+        if ($user->sync_theme && $request->cookie('theme')) {
+            $user->theme = $request->cookie('theme');
+            $user->save();
+        }
+
         return match ($user->role) {
             'admin'    => redirect()->route('admin.dashboard'),
             default    => redirect()->route('dashboard'),

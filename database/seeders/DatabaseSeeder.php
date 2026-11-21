@@ -28,22 +28,67 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. Initial 9 Categories
+        // 2. Initial 9 Categories with Multilingual Support (UZ, RU, EN)
         $categoriesData = [
-            'Santexnika va suv quvurlari',
-            'Elektr montaj va nosozliklar',
-            'Mebel yasash va ta\'mirlash',
-            'Maishiy texnika ta\'mirlash',
-            'Konditsioner va ventilyatsiya',
-            'Ichki pardozlash va kafel',
-            'Duradgorlik va eshik-rom',
-            'Tozalash va professional klining',
-            'Payvandlash va metall ishlari',
+            [
+                'name' => 'Santexnika va suv quvurlari',
+                'name_ru' => 'Сантехника и водопровод',
+                'name_en' => 'Plumbing & Piping',
+            ],
+            [
+                'name' => 'Elektr montaj va nosozliklar',
+                'name_ru' => 'Электромонтаж и ремонт',
+                'name_en' => 'Electrical Installation & Repair',
+            ],
+            [
+                'name' => 'Mebel yasash va ta\'mirlash',
+                'name_ru' => 'Изготовление и ремонт мебели',
+                'name_en' => 'Furniture Making & Repair',
+            ],
+            [
+                'name' => 'Maishiy texnika ta\'mirlash',
+                'name_ru' => 'Ремонт бытовой техники',
+                'name_en' => 'Appliance Repair',
+            ],
+            [
+                'name' => 'Konditsioner va ventilyatsiya',
+                'name_ru' => 'Кондиционеры и вентиляция',
+                'name_en' => 'Air Conditioning & Ventilation',
+            ],
+            [
+                'name' => 'Ichki pardozlash va kafel',
+                'name_ru' => 'Внутренняя отделка и плитка',
+                'name_en' => 'Interior Finishing & Tiling',
+            ],
+            [
+                'name' => 'Duradgorlik va eshik-rom',
+                'name_ru' => 'Столярные работы и двери/окна',
+                'name_en' => 'Carpentry & Doors/Windows',
+            ],
+            [
+                'name' => 'Tozalash va professional klining',
+                'name_ru' => 'Клининг и профессиональная уборка',
+                'name_en' => 'Cleaning & Professional Janitorial',
+            ],
+            [
+                'name' => 'Payvandlash va metall ishlari',
+                'name_ru' => 'Сварочные и металлические работы',
+                'name_en' => 'Welding & Metalwork',
+            ],
         ];
 
         $categories = [];
-        foreach ($categoriesData as $catName) {
-            $categories[] = Category::firstOrCreate(['name' => $catName]);
+        foreach ($categoriesData as $cData) {
+            $cat = Category::where('name', $cData['name'])->first();
+            if ($cat) {
+                $cat->update([
+                    'name_ru' => $cData['name_ru'],
+                    'name_en' => $cData['name_en'],
+                ]);
+                $categories[] = $cat;
+            } else {
+                $categories[] = Category::create($cData);
+            }
         }
 
         // 3. Initial 9 Masters (Providers)

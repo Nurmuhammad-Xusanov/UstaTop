@@ -35,10 +35,17 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        $guestTheme = $request->cookie('theme') ?: 'system';
+        $guestLocale = $request->cookie('locale') ?: session('locale', 'uz');
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'theme' => $guestTheme,
+            'locale' => $guestLocale,
+            'sync_theme' => true,
+            'sync_telegram_lang' => true,
         ]);
 
         event(new Registered($user));

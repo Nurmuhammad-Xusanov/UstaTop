@@ -60,16 +60,51 @@ class ProfileController extends Controller
 
     /**
      * Update the user's theme preference.
-     */    public function updateTheme(Request $request): RedirectResponse
+     */
+    public function updateTheme(Request $request)
     {
         $request->validate([
             'theme' => ['required', 'in:light,dark,system'],
         ]);
 
         $user = $request->user();
-        $user->theme = $request->input('theme');
-        $user->save();
+        if ($user) {
+            $user->theme = $request->input('theme');
+            $user->save();
+        }
+
+        cookie()->queue(cookie()->forever('theme', $request->input('theme')));
+
+        if ($request->wantsJson()) {
+            return response()->json(['status' => 'success', 'theme' => $request->input('theme')]);
+        }
 
         return Redirect::back()->with('status', 'theme-updated');
-    } 
+    }
+
+    /**
+     * Update the user's sync and language preferences.
+     */
+    public function updatePreferences(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'theme' => ['required', 'in:light,dark,system'],
+            'telegram_locale' => ['nullable', 'in:uz,ru,en'],
+        ]);
+
+        $user = $request->user();
+        $user->theme = $request->input('theme');
+        $user->sync_theme = $request->boolean('sync_theme');
+        $user->sync_telegram_lang = $request->boolean('sync_telegram_lang');
+        
+        if ($request->filled('telegram_locale')) {
+            $user->telegram_locale = $request->input('telegram_locale');
+        }
+
+        $user->save();
+
+        cookie()->queue(cookie()->forever('theme', $user->theme));
+
+        return Redirect::route('profile.edit')->with('status', 'preferences-updated');
+    }
 }      

@@ -152,6 +152,12 @@ class GoogleAuthController extends Controller
                 $user->save();
             }
 
+            $guestTheme = $request->cookie('theme');
+            if ($guestTheme && $user->sync_theme) {
+                $user->theme = $guestTheme;
+                $user->save();
+            }
+
             Auth::login($user, true);
             $request->session()->regenerate();
 

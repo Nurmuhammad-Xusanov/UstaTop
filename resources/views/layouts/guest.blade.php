@@ -15,11 +15,18 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <script>
-            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
+            (function() {
+                var theme = null;
+                try { theme = localStorage.getItem('theme'); } catch(e){}
+                if (!theme) {
+                    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            })();
         </script>
     </head>
     <body class="font-sans text-gray-900 dark:text-gray-100 bg-[#FDFDFC] dark:bg-[#0a0a0a] min-h-screen flex flex-col justify-between antialiased transition-colors duration-200">

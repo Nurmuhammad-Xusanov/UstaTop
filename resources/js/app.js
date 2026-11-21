@@ -29,40 +29,53 @@ Alpine.start();
     }
 })();
 
- window.toggleTheme = async function () {
+window.toggleTheme = async function () {
     const root = document.documentElement;
     const isDark = root.classList.toggle('dark');
     const theme = isDark ? 'dark' : 'light';
 
-    // Logged in → DB
+    try {
+        localStorage.setItem('theme', theme);
+        document.cookie = "theme=" + theme + "; path=/; max-age=" + (365 * 24 * 60 * 60);
+    } catch (e) {}
+
+    // Logged in → Persist to database across devices
     if (window.AUTHENTICATED) {
-        await fetch('/theme', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-            body: JSON.stringify({ theme })
-        });
-        return;
+        try {
+            const tokenEl = document.querySelector('meta[name="csrf-token"]');
+            if (tokenEl) {
+                await fetch('/theme', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': tokenEl.content,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ theme })
+                });
+            }
+        } catch (e) {
+            console.error('Failed to sync theme:', e);
+        }
     }
+};
 
-    // Guest → localStorage
-    localStorage.setItem('theme', theme);
-}
-
+// Sync guest theme to account upon first load if logged in
 if (window.AUTHENTICATED) {
     const guestTheme = localStorage.getItem('theme');
-    if (guestTheme) {
-        fetch('/theme', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-            body: JSON.stringify({ theme: guestTheme })
-        });
-        localStorage.removeItem('theme');
+    if (guestTheme && window.USER_THEME && guestTheme !== window.USER_THEME) {
+        const tokenEl = document.querySelector('meta[name="csrf-token"]');
+        if (tokenEl) {
+            fetch('/theme', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': tokenEl.content,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ theme: guestTheme })
+            }).catch(() => {});
+        }
     }
 }
 

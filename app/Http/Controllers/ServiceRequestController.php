@@ -104,24 +104,52 @@ class ServiceRequestController extends Controller
             })
             ->get();
 
-        $categoryName = $category ? $category->name : 'Xizmat';
-        $commentText = $serviceRequest->comment ? "\n💬 Izoh: {$serviceRequest->comment}" : "";
-        $phoneText = $serviceRequest->phone ? "\n📞 Telefon: {$serviceRequest->phone}" : "";
-        $telegramText = $user->telegram_id ? "\n📱 Telegram: @ustatpuzbot orqali ulangan" : "";
-
-        $message = "🛠 Yangi buyurtma keldi!\n\n" .
-            "📂 Soha: {$categoryName}\n" .
-            "👤 Mijoz: {$user->name}\n" .
-            "✉️ Email: {$serviceRequest->email}" .
-            $phoneText .
-            $telegramText . "\n" .
-            "📍 Shahar: {$serviceRequest->city}" .
-            $commentText . "\n\n" .
-            "🆔 Buyurtma ID: #{$serviceRequest->id}\n" .
-            "👉 Ishni qabul qilish uchun: https://ustatop-lmze.onrender.com/service-requests";
-
         foreach ($providers as $provider) {
-            $this->sendTelegram($provider->telegram_id, $message);
+            $locale = $this->getTelegramLocaleForUser($provider);
+            $catName = $category ? $category->getLocalizedName($locale) : ($locale === 'ru' ? 'Услуга' : ($locale === 'en' ? 'Service' : 'Xizmat'));
+
+            if ($locale === 'ru') {
+                $phoneText = $serviceRequest->phone ? "\n📞 Телефон: {$serviceRequest->phone}" : "";
+                $telegramText = $user->telegram_id ? "\n📱 Telegram: подключен через бота" : "";
+                $commentText = $serviceRequest->comment ? "\n💬 Комментарий: {$serviceRequest->comment}" : "";
+                $msg = "🛠 Новый заказ!\n\n" .
+                    "📂 Категория: {$catName}\n" .
+                    "👤 Клиент: {$user->name}\n" .
+                    "✉️ Email: {$serviceRequest->email}" .
+                    $phoneText . $telegramText . "\n" .
+                    "📍 Город: {$serviceRequest->city}" .
+                    $commentText . "\n\n" .
+                    "🆔 ID заказа: #{$serviceRequest->id}\n" .
+                    "👉 Принять заказ: https://ustatop-lmze.onrender.com/service-requests";
+            } elseif ($locale === 'en') {
+                $phoneText = $serviceRequest->phone ? "\n📞 Phone: {$serviceRequest->phone}" : "";
+                $telegramText = $user->telegram_id ? "\n📱 Telegram: connected via bot" : "";
+                $commentText = $serviceRequest->comment ? "\n💬 Comment: {$serviceRequest->comment}" : "";
+                $msg = "🛠 New service request received!\n\n" .
+                    "📂 Category: {$catName}\n" .
+                    "👤 Client: {$user->name}\n" .
+                    "✉️ Email: {$serviceRequest->email}" .
+                    $phoneText . $telegramText . "\n" .
+                    "📍 City: {$serviceRequest->city}" .
+                    $commentText . "\n\n" .
+                    "🆔 Order ID: #{$serviceRequest->id}\n" .
+                    "👉 Accept order: https://ustatop-lmze.onrender.com/service-requests";
+            } else {
+                $phoneText = $serviceRequest->phone ? "\n📞 Telefon: {$serviceRequest->phone}" : "";
+                $telegramText = $user->telegram_id ? "\n📱 Telegram: @ustatpuzbot orqali ulangan" : "";
+                $commentText = $serviceRequest->comment ? "\n💬 Izoh: {$serviceRequest->comment}" : "";
+                $msg = "🛠 Yangi buyurtma keldi!\n\n" .
+                    "📂 Soha: {$catName}\n" .
+                    "👤 Mijoz: {$user->name}\n" .
+                    "✉️ Email: {$serviceRequest->email}" .
+                    $phoneText . $telegramText . "\n" .
+                    "📍 Shahar: {$serviceRequest->city}" .
+                    $commentText . "\n\n" .
+                    "🆔 Buyurtma ID: #{$serviceRequest->id}\n" .
+                    "👉 Ishni qabul qilish uchun: https://ustatop-lmze.onrender.com/service-requests";
+            }
+
+            $this->sendTelegram($provider->telegram_id, $msg);
         }
 
         return redirect()->route('service-requests.index')
@@ -141,6 +169,17 @@ class ServiceRequestController extends Controller
         $serviceRequest->delete();
 
         return back()->with('success', __('So‘rov o‘chirildi'));
+    }
+
+    private function getTelegramLocaleForUser(?User $user): string
+    {
+        if (!$user) {
+            return 'uz';
+        }
+        if ($user->sync_telegram_lang) {
+            return $user->locale ?: 'uz';
+        }
+        return $user->telegram_locale ?: $user->locale ?: 'uz';
     }
 
     private function sendTelegram($chatId, $text)
@@ -178,10 +217,15 @@ class ServiceRequestController extends Controller
         ]);
 
         if ($serviceRequest->user && $serviceRequest->user->telegram_id) {
-            $this->sendTelegram(
-                $serviceRequest->user->telegram_id,
-                "✅ Sizning #{$serviceRequest->id} buyurtmangiz usta {$provider->name} tomonidan qabul qilindi va jarayonga o'tdi!\n\nBog'lanish: {$provider->email}\nTez orada usta siz bilan bog'lanadi."
-            );
+            $clientLocale = $this->getTelegramLocaleForUser($serviceRequest->user);
+            if ($clientLocale === 'ru') {
+                $msg = "✅ Ваш заказ #{$serviceRequest->id} принят мастером {$provider->name} и перешел в работу!\n\nКонтакты: {$provider->email}\nМастер скоро свяжется с вами.";
+            } elseif ($clientLocale === 'en') {
+                $msg = "✅ Your order #{$serviceRequest->id} has been accepted by craftsman {$provider->name} and is now in progress!\n\nContact: {$provider->email}\nThe craftsman will contact you shortly.";
+            } else {
+                $msg = "✅ Sizning #{$serviceRequest->id} buyurtmangiz usta {$provider->name} tomonidan qabul qilindi va jarayonga o'tdi!\n\nBog'lanish: {$provider->email}\nTez orada usta siz bilan bog'lanadi.";
+            }
+            $this->sendTelegram($serviceRequest->user->telegram_id, $msg);
         }
 
         return back()->with('success', __('Ish muvaffaqiyatli qabul qilindi. Jarayon boshlandi!'));
@@ -204,10 +248,15 @@ class ServiceRequestController extends Controller
         ]);
 
         if ($serviceRequest->user && $serviceRequest->user->telegram_id) {
-            $this->sendTelegram(
-                $serviceRequest->user->telegram_id,
-                "ℹ️ Sizning #{$serviceRequest->id} buyurtmangiz bo'yicha usta ishni bajara olmadi. So'rovingiz boshqa ustalar qabul qilishi uchun qayta ochildi."
-            );
+            $clientLocale = $this->getTelegramLocaleForUser($serviceRequest->user);
+            if ($clientLocale === 'ru') {
+                $msg = "ℹ️ По вашему заказу #{$serviceRequest->id} мастер не смог завершить работу. Ваш заказ снова открыт для других мастеров.";
+            } elseif ($clientLocale === 'en') {
+                $msg = "ℹ️ The craftsman could not complete the work for order #{$serviceRequest->id}. Your request has been reopened for other craftsmen.";
+            } else {
+                $msg = "ℹ️ Sizning #{$serviceRequest->id} buyurtmangiz bo'yicha usta ishni bajara olmadi. So'rovingiz boshqa ustalar qabul qilishi uchun qayta ochildi.";
+            }
+            $this->sendTelegram($serviceRequest->user->telegram_id, $msg);
         }
 
         return back()->with('success', __('Ish bekor qilindi va boshqa ustalar uchun qayta ochildi.'));
@@ -228,10 +277,15 @@ class ServiceRequestController extends Controller
         ]);
 
         if ($serviceRequest->user && $serviceRequest->user->telegram_id) {
-            $this->sendTelegram(
-                $serviceRequest->user->telegram_id,
-                "🛠 Usta {$provider->name} #{$serviceRequest->id} buyurtma bo'yicha ishni tugatganini bildirdi.\n\nIltimos, saytga kirib natijani tasdiqlang: https://ustatop-lmze.onrender.com/service-requests"
-            );
+            $clientLocale = $this->getTelegramLocaleForUser($serviceRequest->user);
+            if ($clientLocale === 'ru') {
+                $msg = "🛠 Мастер {$provider->name} сообщил о завершении работы по заказу #{$serviceRequest->id}.\n\nПожалуйста, подтвердите результат на сайте: https://ustatop-lmze.onrender.com/service-requests";
+            } elseif ($clientLocale === 'en') {
+                $msg = "🛠 Craftsman {$provider->name} marked order #{$serviceRequest->id} as completed.\n\nPlease confirm the work on the website: https://ustatop-lmze.onrender.com/service-requests";
+            } else {
+                $msg = "🛠 Usta {$provider->name} #{$serviceRequest->id} buyurtma bo'yicha ishni tugatganini bildirdi.\n\nIltimos, saytga kirib natijani tasdiqlang: https://ustatop-lmze.onrender.com/service-requests";
+            }
+            $this->sendTelegram($serviceRequest->user->telegram_id, $msg);
         }
 
         return back()->with('success', __('Ish tugatilgani belgilandi. Mijoz tasdiqlashi kutilmoqda.'));
@@ -252,10 +306,15 @@ class ServiceRequestController extends Controller
         ]);
 
         if ($serviceRequest->provider && $serviceRequest->provider->telegram_id) {
-            $this->sendTelegram(
-                $serviceRequest->provider->telegram_id,
-                "🎉 Mijoz #{$serviceRequest->id} buyurtmani muvaffaqiyatli yakunlangan deb tasdiqladi! Mehnat faoliyatingiz uchun rahmat."
-            );
+            $providerLocale = $this->getTelegramLocaleForUser($serviceRequest->provider);
+            if ($providerLocale === 'ru') {
+                $msg = "🎉 Клиент подтвердил успешное завершение заказа #{$serviceRequest->id}! Спасибо за качественную работу.";
+            } elseif ($providerLocale === 'en') {
+                $msg = "🎉 Client confirmed successful completion of order #{$serviceRequest->id}! Thank you for your work.";
+            } else {
+                $msg = "🎉 Mijoz #{$serviceRequest->id} buyurtmani muvaffaqiyatli yakunlangan deb tasdiqladi! Mehnat faoliyatingiz uchun rahmat.";
+            }
+            $this->sendTelegram($serviceRequest->provider->telegram_id, $msg);
         }
 
         return back()->with('success', __('Ish muvaffaqiyatli yakunlandi va tasdiqlandi!'));
@@ -280,10 +339,15 @@ class ServiceRequestController extends Controller
         ]);
 
         if ($prevProvider && $prevProvider->telegram_id) {
-            $this->sendTelegram(
-                $prevProvider->telegram_id,
-                "⚠️ Mijoz #{$serviceRequest->id} buyurtma bo'yicha ish to'liq yakunlanmaganini bildirdi. Buyurtma qayta ochiq holatga o'tkazildi."
-            );
+            $providerLocale = $this->getTelegramLocaleForUser($prevProvider);
+            if ($providerLocale === 'ru') {
+                $msg = "⚠️ Клиент сообщил, что работа по заказу #{$serviceRequest->id} не завершена. Заказ снова открыт для других мастеров.";
+            } elseif ($providerLocale === 'en') {
+                $msg = "⚠️ Client indicated that order #{$serviceRequest->id} was not fully completed. The order is reopened.";
+            } else {
+                $msg = "⚠️ Mijoz #{$serviceRequest->id} buyurtma bo'yicha ish to'liq yakunlanmaganini bildirdi. Buyurtma qayta ochiq holatga o'tkazildi.";
+            }
+            $this->sendTelegram($prevProvider->telegram_id, $msg);
         }
 
         return back()->with('success', __('Ish yakunlanmadi deb belgilandi va so\'rovingiz boshqa ustalar uchun qayta ochildi.'));

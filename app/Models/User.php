@@ -22,6 +22,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'role',
+        'locale',
+        'telegram_locale',
+        'sync_telegram_lang',
+        'sync_theme',
         'telegram_id',
         'google_id',
         'avatar',
@@ -49,6 +53,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'sync_telegram_lang' => 'boolean',
+            'sync_theme' => 'boolean',
         ];
     }
 

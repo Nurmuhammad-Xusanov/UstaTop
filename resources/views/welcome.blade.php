@@ -14,11 +14,28 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <script>
-            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
+            (function() {
+                var userTheme = @json(auth()->user()->theme ?? null);
+                var syncTheme = @json(auth()->user()->sync_theme ?? true);
+                var theme = null;
+
+                if (userTheme && syncTheme) {
+                    theme = userTheme;
+                    try { localStorage.setItem('theme', theme); } catch(e){}
+                } else {
+                    try { theme = localStorage.getItem('theme'); } catch(e){}
+                }
+
+                if (!theme) {
+                    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            })();
         </script>
     </head>
     <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] dark:text-[#EDEDEC] min-h-screen flex flex-col font-sans transition-colors duration-200 antialiased selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black">
@@ -189,7 +206,7 @@
                                         {{ $cat->name }}
                                     </h3>
                                     <span class="text-[10px] text-gray-400 font-mono group-hover:text-accent transition duration-200">
-                                        {{ $cat->users_count > 0 ? $cat->users_count . ' usta' : 'Faol' }}
+                                        {{ $cat->users_count > 0 ? $cat->users_count . ' ' . (app()->getLocale() === 'en' ? 'craftsmen' : (app()->getLocale() === 'ru' ? 'мастеров' : 'usta')) : (app()->getLocale() === 'en' ? 'Active' : (app()->getLocale() === 'ru' ? 'Активно' : 'Faol')) }}
                                     </span>
                                 </div>
                             </a>

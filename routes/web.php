@@ -14,6 +14,14 @@ Route::get('/locale/{lang}', function ($lang) {
     if (in_array($lang, ['uz', 'ru', 'en'])) {
         session(['locale' => $lang]);
         cookie()->queue(cookie()->forever('locale', $lang));
+        if (auth()->check()) {
+            $user = auth()->user();
+            $user->locale = $lang;
+            if ($user->sync_telegram_lang) {
+                $user->telegram_locale = $lang;
+            }
+            $user->save();
+        }
     }
     return redirect()->back();
 })->name('locale.switch');
@@ -54,6 +62,7 @@ Route::middleware('auth')->group(function () {
         '/service-requests/{serviceRequest}/reject',
         [ServiceRequestController::class, 'clientReject']
     )->name('client.service-requests.reject');
+    Route::patch('/profile/preferences', [ProfileController::class, 'updatePreferences'])->name('profile.preferences');
     Route::post('/theme', [ProfileController::class, 'updateTheme'])->name('profile.updateTheme');
 });
 
