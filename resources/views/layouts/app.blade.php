@@ -18,14 +18,13 @@
                 var syncTheme = @json(auth()->user()->sync_theme ?? true);
                 var theme = null;
 
-                if (userTheme && syncTheme) {
+                if (userTheme && syncTheme && userTheme !== 'system') {
                     theme = userTheme;
-                    try { localStorage.setItem('theme', theme); } catch(e){}
                 } else {
                     try { theme = localStorage.getItem('theme'); } catch(e){}
                 }
 
-                if (!theme) {
+                if (!theme || theme === 'system') {
                     theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
                 }
 

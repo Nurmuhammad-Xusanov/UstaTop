@@ -26,13 +26,30 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $user->fill($request->safe()->only(['name', 'email']));
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        if ($request->boolean('remove_avatar')) {
+            if ($user->avatar && str_starts_with($user->avatar, '/avatars/')) {
+                @unlink(public_path($user->avatar));
+            }
+            $user->avatar = null;
+        } elseif ($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+            $dir = public_path('avatars');
+            if (!file_exists($dir)) {
+                @mkdir($dir, 0755, true);
+            }
+            $filename = 'avatar_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move($dir, $filename);
+            $user->avatar = '/avatars/' . $filename;
+        }
+
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
@@ -89,6 +106,7 @@ class ProfileController extends Controller
     {
         $request->validate([
             'theme' => ['required', 'in:light,dark,system'],
+            'locale' => ['nullable', 'in:uz,ru,en'],
             'telegram_locale' => ['nullable', 'in:uz,ru,en'],
         ]);
 
@@ -97,7 +115,18 @@ class ProfileController extends Controller
         $user->sync_theme = $request->boolean('sync_theme');
         $user->sync_telegram_lang = $request->boolean('sync_telegram_lang');
         
-        if ($request->filled('telegram_locale')) {
+        if ($request->filled('locale')) {
+            $locale = $request->input('locale');
+            $user->locale = $locale;
+            session(['locale' => $locale]);
+            cookie()->queue(cookie()->forever('locale', $locale));
+
+            if ($user->sync_telegram_lang) {
+                $user->telegram_locale = $locale;
+            }
+        }
+
+        if ($request->filled('telegram_locale') && !$user->sync_telegram_lang) {
             $user->telegram_locale = $request->input('telegram_locale');
         }
 

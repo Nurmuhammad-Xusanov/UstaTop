@@ -31,8 +31,20 @@ class AuthenticatedSessionController extends Controller
 
         if ($user->sync_theme && $request->cookie('theme')) {
             $user->theme = $request->cookie('theme');
-            $user->save();
         }
+
+        $guestLocale = $request->cookie('locale') ?: session('locale');
+        if ($guestLocale && in_array($guestLocale, ['uz', 'ru', 'en'])) {
+            $user->locale = $guestLocale;
+            if ($user->sync_telegram_lang) {
+                $user->telegram_locale = $guestLocale;
+            }
+            session(['locale' => $guestLocale]);
+        } elseif ($user->locale) {
+            session(['locale' => $user->locale]);
+        }
+
+        $user->save();
 
         return match ($user->role) {
             'admin'    => redirect()->route('admin.dashboard'),

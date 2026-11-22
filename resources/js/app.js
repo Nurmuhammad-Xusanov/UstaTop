@@ -1,4 +1,5 @@
 import "./bootstrap";
+import "./snow";
 
 import Alpine from "alpinejs";
 
@@ -9,24 +10,43 @@ Alpine.start();
 (function () {
     const root = document.documentElement;
 
-    // 1️⃣ Logged in user → DB
-    if (window.AUTHENTICATED && window.USER_THEME) {
-        if (window.USER_THEME === "dark") root.classList.add("dark");
-        if (window.USER_THEME === "light") root.classList.remove("dark");
-        return;
+    function applySystemTheme() {
+        const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        root.classList.toggle("dark", isDark);
     }
 
-    // 2️⃣ Guest → localStorage
+    // 1️⃣ Logged in user with explicit preference
+    if (window.AUTHENTICATED && window.USER_THEME) {
+        if (window.USER_THEME === "dark") {
+            root.classList.add("dark");
+            return;
+        } else if (window.USER_THEME === "light") {
+            root.classList.remove("dark");
+            return;
+        } else if (window.USER_THEME === "system") {
+            applySystemTheme();
+            window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+                root.classList.toggle("dark", e.matches);
+            });
+            return;
+        }
+    }
+
+    // 2️⃣ Guest with manual override
     const stored = localStorage.getItem("theme");
-    if (stored) {
+    if (stored === "dark" || stored === "light") {
         root.classList.toggle("dark", stored === "dark");
         return;
     }
 
-    // 3️⃣ Fallback → system
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        root.classList.add("dark");
-    }
+    // 3️⃣ First-time visitor / Default → System theme
+    applySystemTheme();
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+        const currentStored = localStorage.getItem("theme");
+        if (!currentStored || currentStored === "system") {
+            root.classList.toggle("dark", e.matches);
+        }
+    });
 })();
 
 window.toggleTheme = async function () {

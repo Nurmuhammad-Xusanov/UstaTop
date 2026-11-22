@@ -44,6 +44,7 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'theme' => $guestTheme,
             'locale' => $guestLocale,
+            'telegram_locale' => $guestLocale,
             'sync_theme' => true,
             'sync_telegram_lang' => true,
         ]);

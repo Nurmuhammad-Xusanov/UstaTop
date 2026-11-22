@@ -53,8 +53,9 @@ COPY --from=frontend /app/public/build ./public/build
 RUN composer dump-autoload --optimize --no-scripts
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN mkdir -p /var/www/html/public/avatars \
+    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/avatars \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/avatars
 
 # Copy Nginx & Supervisor configuration
 COPY docker/nginx.conf /etc/nginx/http.d/default.conf

@@ -18,7 +18,7 @@
             (function() {
                 var theme = null;
                 try { theme = localStorage.getItem('theme'); } catch(e){}
-                if (!theme) {
+                if (!theme || theme === 'system') {
                     theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
                 }
                 if (theme === 'dark') {
@@ -38,8 +38,6 @@
             </a>
 
             <div class="flex items-center gap-2">
-                <x-language-switcher />
-
                 <button onclick="toggleTheme()" id="theme-toggle" type="button" aria-label="Toggle Theme"
                     class="p-1.5 rounded border border-gray-200 dark:border-gray-800 hover:border-accent transition duration-200">
                     <div class="dark:bg-white bg-black duration-200 rounded-full w-3.5 h-3.5"></div>

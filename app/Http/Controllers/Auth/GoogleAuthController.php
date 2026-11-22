@@ -128,8 +128,7 @@ class GoogleAuthController extends Controller
                     ]);
                 }
             } else {
-                $updates = false;
-                if ($avatar && $user->avatar !== $avatar) {
+                if ($avatar && empty($user->avatar)) {
                     $user->avatar = $avatar;
                     $updates = true;
                 }
@@ -149,14 +148,27 @@ class GoogleAuthController extends Controller
             // Always ensure email is verified for Google users
             if (!$user->email_verified_at) {
                 $user->email_verified_at = now();
-                $user->save();
             }
 
             $guestTheme = $request->cookie('theme');
             if ($guestTheme && $user->sync_theme) {
                 $user->theme = $guestTheme;
-                $user->save();
             }
+
+            $guestLocale = $request->cookie('locale') ?: session('locale');
+            if ($guestLocale && in_array($guestLocale, ['uz', 'ru', 'en'])) {
+                if (!$user->locale || $user->sync_telegram_lang) {
+                    $user->locale = $guestLocale;
+                    if ($user->sync_telegram_lang) {
+                        $user->telegram_locale = $guestLocale;
+                    }
+                }
+                session(['locale' => $guestLocale]);
+            } elseif ($user->locale) {
+                session(['locale' => $user->locale]);
+            }
+
+            $user->save();
 
             Auth::login($user, true);
             $request->session()->regenerate();
