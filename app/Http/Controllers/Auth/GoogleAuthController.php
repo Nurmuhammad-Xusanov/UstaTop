@@ -130,18 +130,12 @@ class GoogleAuthController extends Controller
             } else {
                 if ($avatar && empty($user->avatar)) {
                     $user->avatar = $avatar;
-                    $updates = true;
                 }
                 if (!$user->email_verified_at) {
                     $user->email_verified_at = now();
-                    $updates = true;
                 }
                 if ($email === 'nursherzil@gmail.com' && $user->role !== 'admin') {
                     $user->role = 'admin';
-                    $updates = true;
-                }
-                if ($updates) {
-                    $user->save();
                 }
             }
 
